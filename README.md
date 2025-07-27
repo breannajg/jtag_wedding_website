@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Jon & Amanda's Wedding Website 💍
 
-## Getting Started
+A modern, elegant wedding website built to celebrate the upcoming union of Jon and Amanda. Designed with responsiveness and aesthetics in mind, the site highlights their love story, RSVP functionality, and beautiful full-screen photography — all styled in a royal, editorial feel.
 
-First, run the development server:
+---
+
+## ✨ Tech Stack & Tooling
+
+| Tool | Purpose |
+|------|---------|
+| **Next.js 14 (App Router)** | Core React framework for modern, server-rendered web apps |
+| **TypeScript** | Safer, typed JavaScript for better dev experience |
+| **Tailwind CSS** | Utility-first styling with responsive design control |
+| **shadcn/ui** | Prebuilt, modern UI components styled with Tailwind |
+| **Framer Motion** | Smooth, modern animations for transitions and visuals |
+| **Lucide Icons** | Clean SVG icons for modern design accents |
+| **Next.js Image Component** | Optimized image loading and layout |
+| **Google Fonts (DM Sans)** | Elegant, legible typeface for visual polish |
+| **Vercel** | One-click deployment with a clean, shareable URL |
+| **Git + GitHub** | Version control and collaboration |
+
+---
+
+## 🚀 Features
+
+- Full-screen, animated landing page with parallax effects
+- Elegant love story section with frosted glass overlay
+- Smooth in-page scrolling via navigation or animated down arrows
+- Custom font and hover effects to match a modern wedding aesthetic
+- Responsive design across mobile, tablet, and desktop
+- Ready for future RSVP form integration with Google Sheets
+
+---
+
+## 📸 Demo Screenshot
+*(Optional: Add a screenshot or gif here showing off the landing page)*
+
+---
+
+## 🛠 To Run Locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
