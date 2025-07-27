@@ -32,11 +32,6 @@ A modern, elegant wedding website built to celebrate the upcoming union of Jon a
 
 ---
 
-## 📸 Demo Screenshot
-*(Optional: Add a screenshot or gif here showing off the landing page)*
-
----
-
 ## 🛠 To Run Locally
 
 ```bash
