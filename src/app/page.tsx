@@ -5,13 +5,6 @@ import Image from 'next/image'
 import { ChevronDown } from 'lucide-react'
 
 export default function Home() {
-  const scrollToStory = () => {
-    const el = document.getElementById('love-story')
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' })
-    }
-  }
-
   return (
     <>
     <nav className="fixed top-0 left-0 w-full z-50 flex justify-end px-6 py-4 bg-white/30 backdrop-blur-md">
@@ -119,17 +112,21 @@ export default function Home() {
             <h2 className="text-3xl md:text-4xl font-serif mb-6">
               The Story of Jon & Amanda
             </h2>
-            <p className="text-md md:text-lg leading-relaxed font-light">
-              Following her graduation, Miss Amanda relocated from her hometown of Chattanooga, Tennessee, to the greater Boston area to begin her professional career. Mr. Jon, already established in the city and focused on his own path, would soon find his world altered by Amanda’s quiet arrival.
-              <br /><br />
-              A collegial acquaintance grew into friendship in time, with weekends marked by shared excursions and an ever-deepening ease between them.
-              <br /><br />
-              During a visit to Provincetown and the Cape Cod National Seashore, what had long remained unspoken quietly emerged. As the sun descended, Mr. Jon stepped away from their group and joined Amanda in stillness. In that moment, Amanda understood her heart.
-              <br /><br />
-              In 2022, the couple began their courtship. Their relationship is one marked by encouragement, curiosity, and a shared delight in the everyday.
-              <br /><br />
-              The couple became engaged in March of 2024 and look forward to celebrating their union surrounded by family and cherished friends.
+            <p className="text-md md:text-lg leading-relaxed font-light whitespace-pre-line">
+
+              {
+                `Following her graduation, Miss Amanda relocated from her hometown of Chattanooga, Tennessee, to the greater Boston area to begin her professional career. Mr. Jon, already established in the city and focused on his own path, would soon find his world altered by Amanda's quiet arrival.
+
+                A collegial acquaintance grew into friendship in time, with weekends marked by shared excursions and an ever-deepening ease between them.
+
+                During a visit to Provincetown and the Cape Cod National Seashore, what had long remained unspoken quietly emerged. As the sun descended, Mr. Jon stepped away from their group and joined Amanda in stillness. In that moment, Amanda understood her heart.
+
+                In 2022, the couple began their courtship. Their relationship is one marked by encouragement, curiosity, and a shared delight in the everyday.
+
+                The couple became engaged in March of 2024 and look forward to celebrating their union surrounded by family and cherished friends.`
+              }
             </p>
+
           </div>
             <motion.div
             className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-20 cursor-pointer"
@@ -146,34 +143,34 @@ export default function Home() {
         </div>
       </section>
 
-<section
-  id="rsvp"
-  className="relative w-full min-h-screen flex flex-col md:flex-row overflow-hidden"
->
-  {/* Side Image Panel (left on desktop) */}
-  <div className="relative w-full md:w-1/2 min-h-[400px] md:min-h-screen">
-    <Image
-      src="/images/rsvp.jpg"
-      alt="RSVP"
-      fill
-      className="object-cover"
-      priority
-    />
-  </div>
+      <section
+        id="rsvp"
+        className="relative w-full min-h-screen flex flex-col md:flex-row overflow-hidden"
+      >
+        {/* Side Image Panel (left on desktop) */}
+        <div className="relative w-full md:w-1/2 min-h-[400px] md:min-h-screen">
+          <Image
+            src="/images/rsvp.jpg"
+            alt="RSVP"
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
 
-  {/* Content Area */}
-  <div className="flex items-center justify-center w-full md:w-1/2 bg-white text-black px-6 py-20 md:py-0">
-    <div className="max-w-lg text-center">
-      <h2 className="text-3xl md:text-4xl font-serif mb-8">RSVP</h2>
-      <p className="text-lg mb-6">
-        We can’t wait to celebrate with you! Please let us know if you'll be attending.
-      </p>
-      <button className="bg-black text-white px-6 py-3 rounded-full hover:bg-neutral-800 transition">
-        RSVP Form Coming Soon
-      </button>
-    </div>
-  </div>
-</section>
+        {/* Content Area */}
+        <div className="flex items-center justify-center w-full md:w-1/2 bg-white text-black px-6 py-20 md:py-0">
+          <div className="max-w-lg text-center">
+            <h2 className="text-3xl md:text-4xl font-serif mb-8">RSVP</h2>
+            <p className="text-lg mb-6">
+              {"We can’t wait to celebrate with you! Please let us know if you'll be attending."}
+            </p>
+            <button className="bg-black text-white px-6 py-3 rounded-full hover:bg-neutral-800 transition">
+              RSVP Form Coming Soon
+            </button>
+          </div>
+        </div>
+      </section>
 
 
     </>
