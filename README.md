@@ -32,6 +32,13 @@ A modern, elegant wedding website built to celebrate the upcoming union of Jon a
 
 ---
 
+## ⚡ Deployment
+
+This site was deployed using [Vercel](https://vercel.com), a platform for frontend frameworks and static sites.
+
+To deploy, I connected the GitHub repository to Vercel and selected the `main` branch. Vercel automatically detected the Next.js project structure and handled the build and deployment process. The production site is live and updates automatically with each push to the `main` branch.
+
+---
 ## 🛠 To Run Locally
 
 ```bash
