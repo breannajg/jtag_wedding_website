@@ -39,7 +39,10 @@ This site was deployed using [Vercel](https://vercel.com), a platform for fronte
 To deploy, I connected the GitHub repository to Vercel and selected the `main` branch. Vercel automatically detected the Next.js project structure and handled the build and deployment process. The production site is live and updates automatically with each push to the `main` branch.
 
 ---
+<<<<<<< HEAD
 
+=======
+>>>>>>> dev
 ## 🛠 To Run Locally
 
 ```bash
