@@ -15,6 +15,7 @@ A modern, elegant wedding website built to celebrate the upcoming union of Jon a
 | **Framer Motion** | Smooth, modern animations for transitions and visuals |
 | **Lucide Icons** | Clean SVG icons for modern design accents |
 | **Next.js Image Component** | Optimized image loading and layout |
+| **Google Translate API** | Dynamically translates all visible text with caching support |
 | **Google Fonts (DM Sans)** | Elegant, legible typeface for visual polish |
 | **Vercel** | One-click deployment with a clean, shareable URL |
 | **Git + GitHub** | Version control and collaboration |
@@ -23,12 +24,15 @@ A modern, elegant wedding website built to celebrate the upcoming union of Jon a
 
 ## 🚀 Features
 
-- Full-screen, animated landing page with parallax effects
-- Elegant love story section with frosted glass overlay
-- Smooth in-page scrolling via navigation or animated down arrows
-- Custom font and hover effects to match a modern wedding aesthetic
-- Responsive design across mobile, tablet, and desktop
-- Ready for future RSVP form integration with Google Sheets
+- **Full-screen, animated landing page** with parallax effects  
+- **Google Translate API integration** for multilingual support  
+  - Caches translations in `localStorage` (disabled in development for easier content editing)  
+  - Supports **English**, **French**, **Hindi**, and **Malayalam** out-of-the-box  
+- **Elegant love story section** with frosted glass overlay  
+- **Smooth in-page scrolling** via navigation or animated down arrows  
+- **Custom font and hover effects** to match a modern wedding aesthetic  
+- **Responsive design** across mobile, tablet, and desktop  
+- **RSVP form integration-ready**, with future support for Google Sheets
 
 ---
 
@@ -39,10 +43,6 @@ This site was deployed using [Vercel](https://vercel.com), a platform for fronte
 To deploy, I connected the GitHub repository to Vercel and selected the `main` branch. Vercel automatically detected the Next.js project structure and handled the build and deployment process. The production site is live and updates automatically with each push to the `main` branch.
 
 ---
-<<<<<<< HEAD
-
-=======
->>>>>>> dev
 ## 🛠 To Run Locally
 
 ```bash
