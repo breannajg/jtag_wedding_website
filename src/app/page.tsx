@@ -1,12 +1,12 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import LanguageModal from '@/components/ui/LanguageModal'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { translateText } from '@/utils/translateText'
 
-// Moved outside to avoid re-creating the object on each render
+// Static copy
 const textBlocks = {
   navHome: 'Home',
   navStory: 'Our Story',
@@ -26,16 +26,17 @@ The couple became engaged in March of 2024 and look forward to celebrating their
   rsvpText: "We can’t wait to celebrate with you! Please let us know if you'll be attending.",
 }
 
-const isDev = process.env.NODE_ENV === 'development'
-
 export default function Home() {
-  // Start with no language chosen; show the image first
   const [language, setLanguage] = useState('')
   const [hasChosenLanguage, setHasChosenLanguage] = useState(false)
   const [translated, setTranslated] = useState<Record<string, string>>({})
+  const isDev = process.env.NODE_ENV === 'development'
+
+  // Video fade-in control
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const [videoReady, setVideoReady] = useState(false)
 
   useEffect(() => {
-    // Don’t translate until a user has actually chosen a language
     if (!hasChosenLanguage) return
 
     if (language === 'English') {
@@ -46,12 +47,9 @@ export default function Home() {
     const translateAll = async () => {
       const newTranslations: Record<string, string> = {}
 
-      // Clear cached translations in dev for easy iteration
       if (isDev && typeof window !== 'undefined') {
         Object.keys(localStorage).forEach((key) => {
-          if (key.startsWith('translation-')) {
-            localStorage.removeItem(key)
-          }
+          if (key.startsWith('translation-')) localStorage.removeItem(key)
         })
       }
 
@@ -79,7 +77,7 @@ export default function Home() {
     }
 
     translateAll()
-  }, [language, hasChosenLanguage])
+  }, [language, hasChosenLanguage, isDev])
 
   const getText = (key: keyof typeof textBlocks) =>
     translated[key] || textBlocks[key]
@@ -89,8 +87,8 @@ export default function Home() {
       <LanguageModal
         onSelect={(lang) => {
           setLanguage(lang)
-          // Only at this moment do we allow the video to mount & autoplay
           setHasChosenLanguage(true)
+          setVideoReady(false) // reset fade if language changes later
         }}
       />
 
@@ -117,35 +115,47 @@ export default function Home() {
 
       {/* Hero */}
       <section id="home" className="relative h-screen w-full overflow-hidden bg-black text-white">
-        {hasChosenLanguage ? (
+        {/* Fallback image stays visible until video is decoded */}
+        <Image
+          src="/images/bkgrnd.jpg"
+          alt="The couple"
+          fill
+          priority
+          className={`object-cover absolute inset-0 z-0 transition-opacity duration-500 [will-change:opacity] ${
+            hasChosenLanguage && videoReady ? 'opacity-0' : 'opacity-100'
+          }`}
+        />
+
+        {/* Mount video only after language is chosen; fade it in when ready */}
+        {hasChosenLanguage && (
           <video
-            key={language}               // fresh instance after selection / if language changes later
+            ref={videoRef}
             src="/videos/envelopeclosed.mp4"
             autoPlay
             muted
             loop
             playsInline
-            preload="none"               // don’t prefetch before user chooses
-            className="absolute inset-0 w-full h-full object-cover z-0 opacity-90"
-          />
-        ) : (
-          <Image
-            src="/images/bkgrnd.jpg"
-            alt="The couple"
-            fill
-            className="object-cover z-0 opacity-90"
-            priority
+            poster="/images/bkgrnd.jpg"
+            preload="auto"
+            onLoadedData={() => setVideoReady(true)} // or onCanPlay
+            className={`absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-500 [will-change:opacity] ${
+              videoReady ? 'opacity-100' : 'opacity-0'
+            }`}
           />
         )}
-        {hasChosenLanguage && (
-        <div className="absolute inset-0 z-10 flex flex-col items-center justify-end text-center px-4 pb-28">
-          <motion.h1
-            className="font-playfair italic text-5xl md:text-6xl tracking-tight drop-shadow-lg"
-          >
-            {getText('title')}
-          </motion.h1>
 
-        </div>
+        {/* Title appears only after a language is chosen */}
+        {hasChosenLanguage && (
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-end text-center px-4 pb-28">
+            <motion.h1
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1 }}
+              className="font-playfair italic text-5xl md:text-6xl tracking-tight drop-shadow-lg"
+            >
+              {getText('title')}
+            </motion.h1>
+          </div>
         )}
       </section>
 
