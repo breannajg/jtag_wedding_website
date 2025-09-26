@@ -29,19 +29,25 @@ The couple became engaged in March of 2024 and look forward to celebrating their
 const isDev = process.env.NODE_ENV === 'development'
 
 export default function Home() {
-  const [language, setLanguage] = useState('English')
+  // Start with no language chosen; show the image first
+  const [language, setLanguage] = useState('')
+  const [hasChosenLanguage, setHasChosenLanguage] = useState(false)
   const [translated, setTranslated] = useState<Record<string, string>>({})
 
   useEffect(() => {
-    const translateAll = async () => {
-      if (language === 'English') {
-        setTranslated({})
-        return
-      }
+    // Don’t translate until a user has actually chosen a language
+    if (!hasChosenLanguage) return
 
+    if (language === 'English') {
+      setTranslated({})
+      return
+    }
+
+    const translateAll = async () => {
       const newTranslations: Record<string, string> = {}
 
-      if (isDev) {
+      // Clear cached translations in dev for easy iteration
+      if (isDev && typeof window !== 'undefined') {
         Object.keys(localStorage).forEach((key) => {
           if (key.startsWith('translation-')) {
             localStorage.removeItem(key)
@@ -53,7 +59,7 @@ export default function Home() {
         const originalText = textBlocks[key as keyof typeof textBlocks]
         const cacheKey = `translation-${language}-${key}`
 
-        if (!isDev) {
+        if (!isDev && typeof window !== 'undefined') {
           const cached = localStorage.getItem(cacheKey)
           if (cached) {
             newTranslations[key] = cached
@@ -64,7 +70,7 @@ export default function Home() {
         const translatedText = await translateText(originalText, language)
         newTranslations[key] = translatedText
 
-        if (!isDev) {
+        if (!isDev && typeof window !== 'undefined') {
           localStorage.setItem(cacheKey, translatedText)
         }
       }
@@ -73,14 +79,20 @@ export default function Home() {
     }
 
     translateAll()
-  }, [language])
+  }, [language, hasChosenLanguage])
 
   const getText = (key: keyof typeof textBlocks) =>
     translated[key] || textBlocks[key]
 
   return (
     <>
-      <LanguageModal onSelect={(lang) => setLanguage(lang)} />
+      <LanguageModal
+        onSelect={(lang) => {
+          setLanguage(lang)
+          // Only at this moment do we allow the video to mount & autoplay
+          setHasChosenLanguage(true)
+        }}
+      />
 
       {/* Nav */}
       <nav className="fixed top-0 left-0 w-full z-50 flex justify-end px-6 py-4 bg-white/30 backdrop-blur-md">
@@ -105,22 +117,47 @@ export default function Home() {
 
       {/* Hero */}
       <section id="home" className="relative h-screen w-full overflow-hidden bg-black text-white">
-        <Image src="/images/1lake.jpg" alt="The couple" fill className="object-cover z-0 opacity-90" priority />
-        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-4">
+        {hasChosenLanguage ? (
+          <video
+            key={language}               // fresh instance after selection / if language changes later
+            src="/videos/envvid.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="none"               // don’t prefetch before user chooses
+            className="absolute inset-0 w-full h-full object-cover z-0 opacity-90"
+          />
+        ) : (
+          <Image
+            src="/images/1lake.jpg"
+            alt="The couple"
+            fill
+            className="object-cover z-0 opacity-90"
+            priority
+          />
+        )}
+
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-end text-center px-4 pb-28">
           <motion.h1
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1 }}
-            className="text-5xl md:text-7xl font-serif tracking-tight drop-shadow-lg"
+            className="font-playfair italic text-5xl md:text-6xl tracking-tight drop-shadow-lg"
           >
             {getText('title')}
           </motion.h1>
+
         </div>
+
       </section>
 
       {/* Love Story */}
       <section id="love-story" className="relative w-full min-h-screen text-neutral-900 py-20 px-6">
-        <Image src="/images/lovestory.jpg" alt="Love Story" fill className="object-cover opacity-80 z-0" priority />
+        <Image
+          src="/images/lovestory.jpg"
+          alt="Love Story"
+          fill
+          className="object-cover opacity-80 z-0"
+          priority
+        />
         <div className="relative z-10 flex justify-start">
           <div className="w-full md:w-[40%] bg-white/70 backdrop-blur-md px-6 py-10 rounded-lg shadow-lg">
             <h2 className="text-3xl md:text-4xl font-serif mb-6">

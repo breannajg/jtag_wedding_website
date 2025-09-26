@@ -1,16 +1,23 @@
+// app/layout.tsx
 import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
-import { DM_Sans } from "next/font/google"
+import { Geist, Geist_Mono, DM_Sans, Playfair_Display } from "next/font/google"
 import "./globals.css"
 
-// Register DM Sans
 const dmSans = DM_Sans({
   subsets: ["latin"],
   weight: ["400", "500"],
   variable: "--font-dm-sans",
 })
 
-// Register Geist Fonts
+const playfair = Playfair_Display({
+  weight: ["400"],             // Playfair has no 300 on Google Fonts
+  style: ["normal", "italic"], // enable both
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-playfair",
+})
+
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -28,13 +35,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${dmSans.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${dmSans.variable} ${playfair.variable} antialiased`}
       >
         {children}
       </body>
