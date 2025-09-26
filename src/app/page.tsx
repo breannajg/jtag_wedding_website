@@ -120,7 +120,7 @@ export default function Home() {
         {hasChosenLanguage ? (
           <video
             key={language}               // fresh instance after selection / if language changes later
-            src="/videos/envvid.mp4"
+            src="/videos/envelopeclosed.mp4"
             autoPlay
             muted
             loop
@@ -130,14 +130,14 @@ export default function Home() {
           />
         ) : (
           <Image
-            src="/images/1lake.jpg"
+            src="/images/bkgrnd.jpg"
             alt="The couple"
             fill
             className="object-cover z-0 opacity-90"
             priority
           />
         )}
-
+        {hasChosenLanguage && (
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-end text-center px-4 pb-28">
           <motion.h1
             className="font-playfair italic text-5xl md:text-6xl tracking-tight drop-shadow-lg"
@@ -146,7 +146,7 @@ export default function Home() {
           </motion.h1>
 
         </div>
-
+        )}
       </section>
 
       {/* Love Story */}
