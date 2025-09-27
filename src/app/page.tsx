@@ -130,7 +130,7 @@ export default function Home() {
         {hasChosenLanguage && (
           <video
             ref={videoRef}
-            src="/videos/envelopeclosed.mp4"
+            src="/videos/envvidfinal.mp4"
             autoPlay
             muted
             loop
