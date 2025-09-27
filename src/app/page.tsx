@@ -154,7 +154,7 @@ export default function Home() {
           <video
             key={isMobile ? 'mobile' : 'desktop'} // force reload on breakpoint switch
             ref={videoRef}
-            src={isMobile ? '/videos/cellenvelopeclosed.mp4' : '/videos/envelopeclosed.mp4'}
+            src={isMobile ? '/videos/cellenvclosed.mp4' : '/videos/envelopeclosed.mp4'}
             autoPlay
             muted
             loop
@@ -169,9 +169,10 @@ export default function Home() {
         )}
 
 
-        {/* Title appears only after a language is chosen */}
+        {/* Title appears only after a language is chosen
         {hasChosenLanguage && (
-          <div className="absolute inset-0 z-10 flex flex-col items-center justify-end text-center px-4 pb-28">
+
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-end text-center px-4 pb-5">
             <motion.h1
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
@@ -180,10 +181,101 @@ export default function Home() {
             >
               {getText('title')}
             </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.3 }}
+              className="font-playfair italic text-1xl md:text-4xl tracking-tight drop-shadow-lg"
+            >
+              6-11-26
+            </motion.p>
+
+            <motion.button
+              onClick={() =>
+                document.getElementById('love-story')?.scrollIntoView({ behavior: 'smooth' })
+              }
+              // no opacity animation; no keyframe array reset
+              initial={false}
+              animate={{ y: 8 }}
+              transition={{ duration: 1.8, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
+              aria-label="Scroll to love story"
+              className="mt-8 p-3 bg-white/20 backdrop-blur-md rounded-lg hover:bg-white/30 focus:outline-none focus:ring-0"
+              style={{ willChange: 'transform' }}
+            >
+              <svg
+                viewBox="0 0 24 24"
+                className="w-6 h-6"
+                fill="none"
+                stroke="white"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M6 9l6 6 6-6" />
+              </svg>
+            </motion.button>
+
           </div>
         )}
-      </section>
+      </section> */}
 
+        {/* Title appears only after a language is chosen */}
+        {hasChosenLanguage && (
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-4">
+            <motion.h1
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1 }}
+              className="font-playfair italic text-4xl md:text-5xl tracking-tight drop-shadow-[0_8px_10px_rgba(0,0,0,0.4)]"
+            >
+              {getText('title')}
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.3 }}
+              className="font-playfair italic text-1xl md:text-4xl tracking-tight drop-shadow-lg drop-shadow-[0_8px_10px_rgba(0,0,0,0.4)] mt-2"
+            >
+              6-11-26
+            </motion.p>
+
+            <motion.button
+              onClick={() =>
+                document.getElementById('love-story')?.scrollIntoView({ behavior: 'smooth' })
+              }
+              initial={false}
+              animate={{ y: 8 }}
+              transition={{ duration: 1.8, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
+              aria-label="Scroll to love story"
+              className="mt-0 hover:bg-white/30 focus:outline-none focus:ring-0"
+              style={{ willChange: 'transform' }}
+            >
+              <svg
+                viewBox="0 0 24 24"
+                className="w-6 h-6"
+                fill="none"
+                stroke="white"
+                strokeWidth="4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M6 9l6 6 6-6" />
+              </svg>
+            </motion.button>
+                        <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.3 }}
+              className="font-playfair italic text-1xl md:text-4xl tracking-tight drop-shadow-lg mt-19"
+            >
+           
+            </motion.p>
+          </div>
+        )}
+      </section> 
+      
       {/* Love Story */}
       <section id="love-story" className="relative w-full min-h-screen text-neutral-900 py-20 px-6">
         <Image
