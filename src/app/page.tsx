@@ -154,7 +154,7 @@ export default function Home() {
           <video
             key={isMobile ? 'mobile' : 'desktop'} // force reload on breakpoint switch
             ref={videoRef}
-            src={isMobile ? '/videos/cellenvclosed.mp4' : '/videos/envelopeclosed.mp4'}
+            src={isMobile ? '/videos/cellenvelopeclosed.mp4' : '/videos/envelopeclosed.mp4'}
             autoPlay
             muted
             loop
