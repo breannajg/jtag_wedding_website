@@ -6,6 +6,9 @@ import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { translateText } from '@/utils/translateText'
 
+
+
+
 // Static copy
 const textBlocks = {
   navHome: 'Home',
@@ -35,6 +38,26 @@ export default function Home() {
   // Video fade-in control
   const videoRef = useRef<HTMLVideoElement>(null)
   const [videoReady, setVideoReady] = useState(false)
+
+  // 🔽 add this
+  const [isMobile, setIsMobile] = useState(false)
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const mql = window.matchMedia('(max-width: 768px)')
+    const onChange = (e: MediaQueryListEvent | MediaQueryList) =>
+      setIsMobile('matches' in e ? e.matches : (e as MediaQueryList).matches)
+
+    // set initial
+    setIsMobile(mql.matches)
+
+    // listen for changes
+    mql.addEventListener?.('change', onChange)
+    mql.addListener?.(onChange) // fallback
+    return () => {
+      mql.removeEventListener?.('change', onChange)
+      mql.removeListener?.(onChange) // fallback
+    }
+  }, [])
 
   useEffect(() => {
     if (!hasChosenLanguage) return
@@ -114,39 +137,37 @@ export default function Home() {
       </nav>
 
       {/* Hero */}
-      <section id="home" className="relative h-dvh min-h-[100svh] md:h-screen w-full overflow-hidden bg-black text-white">
+      <section id="home" className="relative h-screen w-full overflow-hidden bg-black text-white">
         {/* Fallback image stays visible until video is decoded */}
         <Image
           src="/images/bkgrnd.jpg"
           alt="The couple"
           fill
           priority
-          
-          className={`absolute inset-0 z-0 transition-opacity duration-500 [will-change:opacity]
-            ${hasChosenLanguage && videoReady ? 'opacity-0' : 'opacity-100'}
-            object-cover object-[50%_65%] md:object-center
-          `}
-          sizes="100vw"
+          className={`object-cover absolute inset-0 z-0 transition-opacity duration-500 [will-change:opacity] ${
+            hasChosenLanguage && videoReady ? 'opacity-0' : 'opacity-100'
+          }`}
         />
 
         {/* Mount video only after language is chosen; fade it in when ready */}
         {hasChosenLanguage && (
           <video
+            key={isMobile ? 'mobile' : 'desktop'} // force reload on breakpoint switch
             ref={videoRef}
-            src="/videos/envvidfinal.mp4"
+            src={isMobile ? '/videos/cellenvclosed.mp4' : '/videos/envelopeclosed.mp4'}
             autoPlay
             muted
             loop
             playsInline
             poster="/images/bkgrnd.jpg"
             preload="auto"
-            onLoadedData={() => setVideoReady(true)} // or onCanPlay
-            className={`absolute inset-0 w-full h-full z-0 transition-opacity duration-500 [will-change:opacity]
-              ${videoReady ? 'opacity-100' : 'opacity-0'}
-              object-cover object-[50%_65%] md:object-center
-            `}
+            onLoadedData={() => setVideoReady(true)}
+            className={`absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-500 [will-change:opacity] ${
+              videoReady ? 'opacity-100' : 'opacity-0'
+            }`}
           />
         )}
+
 
         {/* Title appears only after a language is chosen */}
         {hasChosenLanguage && (
