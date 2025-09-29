@@ -370,7 +370,7 @@ export default function Home() {
               another section
             </p>
             <button className="bg-black text-white px-6 py-3 rounded-full hover:bg-neutral-800 transition">
-              i'm a button.
+              a button.
             </button>
           </div>
         </div>
