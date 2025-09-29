@@ -33,13 +33,13 @@ export default function Home() {
   const [language, setLanguage] = useState('')
   const [hasChosenLanguage, setHasChosenLanguage] = useState(false)
   const [translated, setTranslated] = useState<Record<string, string>>({})
+  const [lastName, setLastName] = useState('');
+  const [needsName, setNeedsName] = useState(false);
   const isDev = process.env.NODE_ENV === 'development'
 
   // Video fade-in control
   const videoRef = useRef<HTMLVideoElement>(null)
   const [videoReady, setVideoReady] = useState(false)
-
-  // 🔽 add this
   const [isMobile, setIsMobile] = useState(false)
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -58,6 +58,26 @@ export default function Home() {
       mql.removeListener?.(onChange) // fallback
     }
   }, [])
+
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const cached = localStorage.getItem('guest-last-name');
+    if (cached) setLastName(cached);
+  }, []);
+
+  const handleProceed = () => {
+    if (!lastName.trim()) {
+      setNeedsName(true);
+      setTimeout(() => setNeedsName(false), 400); // reset shake
+      return;
+    }
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('guest-last-name', lastName.trim());
+    }
+    document.getElementById('second-page-env-opener')?.scrollIntoView({ behavior: 'smooth' });
+  };
+  
 
   useEffect(() => {
     if (!hasChosenLanguage) return
@@ -124,7 +144,7 @@ export default function Home() {
             </a>
           </li>
           <li>
-            <a href="#love-story" className="hover:text-neutral-500 transition">
+            <a href="#second-page-env-opener" className="hover:text-neutral-500 transition">
               {getText('navStory')}
             </a>
           </li>
@@ -154,7 +174,7 @@ export default function Home() {
           <video
             key={isMobile ? 'mobile' : 'desktop'} // force reload on breakpoint switch
             ref={videoRef}
-            src={isMobile ? '/videos/cellenvclosed.mp4' : '/videos/envelopeclosed.mp4'}
+            src={isMobile ? '/videos/cellenvclosedhighdef.mp4' : '/videos/highdefclosedenv3.mp4'}
             autoPlay
             muted
             loop
@@ -168,66 +188,14 @@ export default function Home() {
           />
         )}
 
-
-        {/* Title appears only after a language is chosen
-        {hasChosenLanguage && (
-
-          <div className="absolute inset-0 z-10 flex flex-col items-center justify-end text-center px-4 pb-5">
-            <motion.h1
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1 }}
-              className="font-playfair italic text-5xl md:text-6xl tracking-tight drop-shadow-lg"
-            >
-              {getText('title')}
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.3 }}
-              className="font-playfair italic text-1xl md:text-4xl tracking-tight drop-shadow-lg"
-            >
-              6-11-26
-            </motion.p>
-
-            <motion.button
-              onClick={() =>
-                document.getElementById('love-story')?.scrollIntoView({ behavior: 'smooth' })
-              }
-              // no opacity animation; no keyframe array reset
-              initial={false}
-              animate={{ y: 8 }}
-              transition={{ duration: 1.8, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
-              aria-label="Scroll to love story"
-              className="mt-8 p-3 bg-white/20 backdrop-blur-md rounded-lg hover:bg-white/30 focus:outline-none focus:ring-0"
-              style={{ willChange: 'transform' }}
-            >
-              <svg
-                viewBox="0 0 24 24"
-                className="w-6 h-6"
-                fill="none"
-                stroke="white"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M6 9l6 6 6-6" />
-              </svg>
-            </motion.button>
-
-          </div>
-        )}
-      </section> */}
-
         {/* Title appears only after a language is chosen */}
         {hasChosenLanguage && (
-          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-4">
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-4 transform -translate-y-14">
             <motion.h1
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1 }}
-              className="font-playfair italic text-4xl md:text-5xl tracking-tight drop-shadow-[0_8px_10px_rgba(0,0,0,0.4)]"
+              className="font-playfair italic text-4xl md:text-5xl tracking-tight drop-shadow-[0_5px_5px_rgba(0,0,0,0.4)]"
             >
               {getText('title')}
             </motion.h1>
@@ -236,65 +204,156 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.3 }}
-              className="font-playfair italic text-1xl md:text-4xl tracking-tight drop-shadow-lg drop-shadow-[0_8px_10px_rgba(0,0,0,0.4)] mt-2"
+              className="font-playfair italic text-1xl md:text-4xl tracking-tight drop-shadow-[0_4px_2px_rgba(0,0,0,.4)] mt-1"
             >
               6-11-26
             </motion.p>
 
-            <motion.button
-              onClick={() =>
-                document.getElementById('love-story')?.scrollIntoView({ behavior: 'smooth' })
-              }
-              initial={false}
-              animate={{ y: 8 }}
-              transition={{ duration: 1.8, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
-              aria-label="Scroll to love story"
-              className="mt-0 hover:bg-white/30 focus:outline-none focus:ring-0"
-              style={{ willChange: 'transform' }}
-            >
-              <svg
-                viewBox="0 0 24 24"
-                className="w-6 h-6"
-                fill="none"
-                stroke="white"
-                strokeWidth="4"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M6 9l6 6 6-6" />
-              </svg>
-            </motion.button>
-                        <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.3 }}
-              className="font-playfair italic text-1xl md:text-4xl tracking-tight drop-shadow-lg mt-19"
-            >
-           
-            </motion.p>
+
+{/* last-name entry */}
+<motion.div
+  initial={{ opacity: 0, y: 10 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.6, delay: 0.45 }}
+  className="mt-3 w-[10.5rem] md:w-[13rem]"
+>
+  <motion.label
+    htmlFor="last-name"
+    className="sr-only"
+  >
+    Enter your last name
+  </motion.label>
+
+  <motion.div
+    animate={needsName ? { x: [-6, 6, -4, 4, 0] } : { x: 0 }}
+    transition={{ duration: 0.35, ease: 'easeInOut' }}
+    className="relative"
+  >
+    <input
+      id="last-name"
+      type="text"
+      inputMode="text"
+      autoComplete="family-name"
+      placeholder="Please enter your last name"
+      value={lastName}
+      onChange={(e) => setLastName(e.target.value)}
+      className="w-full px-3 py-1.5 rounded-xl
+                 bg-[rgba(255,255,255,0.82)] md:bg-[rgba(255,255,255,0.76)]
+                 text-[11px] md:text-sm
+                 text-neutral-900 placeholder:text-neutral-500
+                 border border-white/60 shadow-[0_6px_16px_rgba(0,0,0,0.18)]
+                 backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-white/50
+                 font-dm text-base tracking-wide"
+      aria-describedby="last-name-help"
+    />
+
+  </motion.div>
+</motion.div>
+
+{/* Subtle hovering carrot (click proceeds) */}
+<motion.div
+  onClick={handleProceed}
+  role="button"
+  tabIndex={0}
+  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleProceed(); }}
+  initial={{ y: 0 }}
+  animate={{ y: [0, 6, 0] }}
+  transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+  aria-label="Proceed"
+  className="relative mt-2 cursor-pointer select-none appearance-none p-0 border-0 outline-none focus-visible:outline-none"
+  style={{ willChange: 'transform' }}
+>
+  {/* soft, classy shadow */}
+  <span
+    aria-hidden="true"
+    className="pointer-events-none absolute left-1/2 top-1/2 -z-10 -translate-x-1/2 -translate-y-1/2
+               h-8 w-8 rounded-full bg-black/28 blur-md opacity-80"
+  />
+  {/* smaller carrot */}
+  <svg
+    viewBox="0 0 24 24"
+    className="w-5 h-5 drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]"
+    fill="none"
+    stroke="white"
+    strokeWidth="3.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M6 9l6 6 6-6" />
+  </svg>
+</motion.div>
+
+
+
+
+
           </div>
         )}
       </section> 
       
-      {/* Love Story */}
-      <section id="love-story" className="relative w-full min-h-screen text-neutral-900 py-20 px-6">
+      {/* second-page-env-opener */}
+      <section id="second-page-env-opener" className="relative min-h-screen flex items-end justify-center pb-8 pb-15">
+
         <Image
-          src="/images/lovestory.jpg"
-          alt="Love Story"
+          src="/images/bkgrnd.jpg"
+          alt="The couple"
           fill
-          className="object-cover opacity-80 z-0"
           priority
+          className={`object-cover absolute inset-0 z-0 transition-opacity duration-500 [will-change:opacity] ${
+            hasChosenLanguage && videoReady ? 'opacity-0' : 'opacity-100'
+          }`}
         />
-        <div className="relative z-10 flex justify-start">
-          <div className="w-full md:w-[40%] bg-white/70 backdrop-blur-md px-6 py-10 rounded-lg shadow-lg">
-            <h2 className="text-3xl md:text-4xl font-serif mb-6">
-              {getText('storyHeader')}
-            </h2>
-            <p className="text-md md:text-lg leading-relaxed font-light whitespace-pre-line">
-              {getText('story')}
-            </p>
-          </div>
-        </div>
+
+        {/* Mount video only after language is chosen; fade it in when ready */}
+        {hasChosenLanguage && (
+          <video
+            key={isMobile ? 'mobile' : 'desktop'} // force reload on breakpoint switch
+            ref={videoRef}
+            src={isMobile ? '/videos/openedenvfinal.mp4' : '/videos/openedenvfinal.mp4'}
+            autoPlay
+            muted
+            loop
+            playsInline
+            poster="/images/bkgrnd.jpg"
+            preload="auto"
+            onLoadedData={() => setVideoReady(true)}
+            className={`absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-500 [will-change:opacity] ${
+              videoReady ? 'opacity-100' : 'opacity-0'
+            }`}
+          />
+          
+        )}
+
+
+
+  <div className="z-10 w-full px-4">
+    <div className="mx-auto max-w-md text-center">
+      <h2 className="font-playfair italic text-2xl md:text-3xl tracking-tight drop-shadow-[0_5px_3px_rgba(0,0,0,0.4)]">
+        You are Invited!
+      </h2>
+      {/* <button className="bg-black text-white px-6 py-3 rounded-full hover:bg-neutral-800 transition mt-3">
+        RSVP Form Coming Soon
+      </button> */}
+
+<button
+  className="font-playfair tracking-normal
+             text-[15px] md:text-base text-neutral-900
+             px-4 py-2 rounded-full
+             bg-white/40 backdrop-blur-md
+             border border-white/50
+             shadow-[0_2px_10px_rgba(0,0,0,0.2)]
+             hover:bg-white/50 hover:border-white/60
+             focus:outline-none focus:ring-2 focus:ring-black/20
+             transition mt-4"
+>
+  RSVP Form Coming Soon
+</button>
+
+
+
+
+    </div>
+  </div>
       </section>
 
       {/* RSVP */}
@@ -304,10 +363,14 @@ export default function Home() {
         </div>
         <div className="flex items-center justify-center w-full md:w-1/2 bg-white text-black px-6 py-20 md:py-0">
           <div className="max-w-lg text-center">
-            <h2 className="text-3xl md:text-4xl font-serif mb-8">{getText('rsvpHeader')}</h2>
-            <p className="text-lg mb-6">{getText('rsvpText')}</p>
+            <h2 className="text-3xl md:text-4xl font-serif mb-8">
+              lalala
+            </h2>
+            <p className="text-lg mb-6">
+              another section
+            </p>
             <button className="bg-black text-white px-6 py-3 rounded-full hover:bg-neutral-800 transition">
-              RSVP Form Coming Soon
+              i'm a button.
             </button>
           </div>
         </div>
