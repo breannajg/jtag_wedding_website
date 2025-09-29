@@ -292,7 +292,7 @@ export default function Home() {
       </section> 
       
       {/* second-page-env-opener */}
-      <section id="second-page-env-opener" className="relative min-h-screen flex items-end justify-center pb-8 pb-15">
+      <section id="second-page-env-opener" className="relative min-h-screen flex items-end justify-center pb-8 pb-11">
 
         <Image
           src="/images/bkgrnd.jpg"
