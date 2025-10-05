@@ -135,82 +135,133 @@ export default function Home() {
         }}
       />
 
-{/* Hero */}
-<section id="home" className="relative w-full h-screen overflow-hidden bg-black text-white">
-  {/* DESKTOP/TABLET (landscape) */}
-  <div className="absolute inset-0 hidden md:block">
-    <video
-      src="/videos/Y.mp4"
-      autoPlay
-      muted
-      loop
-      playsInline
-      poster="/images/landing-2.jpg"
-      className="absolute inset-0 w-full h-full object-cover z-0"
+  {/* Hero */}
+  <section id="home" className="relative w-full h-screen overflow-hidden bg-black text-white">
+    {/* Poster stays on top until video is playing */}
+    <Image
+      src="/images/landing-2.jpg"
+      alt="Invitation background"
+      fill
+      priority
+      className={`absolute inset-0 object-cover transition-opacity duration-500 z-10
+                  ${!hasChosenLanguage || !videoReady ? 'opacity-100' : 'opacity-0'}`}
     />
-    {/* Desktop overlay */}
-    <div className="absolute inset-0 z-10">
-      {/* Input */}
-      <div className="absolute left-1/2 -translate-x-1/2 top-[55%] w-[11rem] lg:w-[13rem]">
-        <input
-          id="last-name"
-          type="text"
-          placeholder="Please enter your last name"
-          className="w-full px-3 py-1.5 rounded-xl bg-white/80 text-sm text-neutral-900
-                     placeholder:text-neutral-500 border border-white/60 shadow-[0_6px_16px_rgba(0,0,0,0.18)]
-                     backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-white/50 font-dm tracking-wide"
-        />
-      </div>
-      {/* Carrot */}
-      <motion.div
-        className="absolute left-1/2 -translate-x-1/2 top-[59%]"
-        animate={{ y: [0, 6, 0] }}
-        transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
-      >
-        <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M6 9l6 6 6-6" />
-        </svg>
-      </motion.div>
-    </div>
-  </div>
 
-  {/* MOBILE (portrait) */}
-  <div className="absolute inset-0 md:hidden">
-    <video
-      src="/videos/vidlanding.mp4"
-      autoPlay
-      muted
-      loop
-      playsInline
-      poster="/images/landing-2.jpg"
-      className="absolute inset-0 w-full h-full object-cover z-0"
-    />
-    {/* Mobile overlay */}
-    <div className="absolute inset-0 z-10">
-      {/* Tweak these % values to your exact frame */}
-      <div className="absolute left-1/2 -translate-x-1/2 top-[52%] w-[10.5rem]">
-        <input
-          id="last-name"
-          type="text"
-          placeholder="Please enter your last name"
-          className="w-full px-3 py-1.5 rounded-xl bg-white/80 text-[11px] text-neutral-900
-                     placeholder:text-neutral-500 border border-white/60 shadow-[0_6px_16px_rgba(0,0,0,0.18)]
-                     backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-white/50 font-dm tracking-wide"
+    {/* DESKTOP/TABLET (landscape) */}
+    <div className="absolute inset-0 hidden md:block">
+      {hasChosenLanguage && (
+        <video
+          key="desktop"
+          src="/videos/Y.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          poster="/images/landing-2.jpg"
+          onPlaying={() => setVideoReady(true)}
+          className="absolute inset-0 w-full h-full object-cover z-0"
         />
-      </div>
+      )}
 
-      <motion.div
-        className="absolute left-1/2 -translate-x-1/2 top-[56%]"
-        animate={{ y: [0, 6, 0] }}
-        transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
-      >
-        <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M6 9l6 6 6-6" />
-        </svg>
-      </motion.div>
+      {/* Desktop overlay appears only once video is playing */}
+      {hasChosenLanguage && videoReady && (
+        <motion.div
+          className="absolute inset-0 z-20"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.8, ease: 'easeOut' }}  // <-- slower fade-in
+        >
+          <div className="absolute left-1/2 -translate-x-1/2 top-[55%] w-[11rem] lg:w-[13rem]">
+            <input
+              id="last-name"
+              type="text"
+              placeholder="Please enter your last name"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              className="w-full px-3 py-1.5 rounded-xl bg-white/80 text-sm text-neutral-900
+                        placeholder:text-neutral-500 border border-white/60 shadow-[0_6px_16px_rgba(0,0,0,0.18)]
+                        backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-white/50 font-dm tracking-wide"
+            />
+          </div>
+
+          <motion.div
+            className="absolute left-1/2 -translate-x-1/2 top-[59%]"
+            animate={{ y: [0, 6, 0] }}
+            transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M6 9l6 6 6-6" />
+            </svg>
+          </motion.div>
+        </motion.div>
+      )}
+
     </div>
-  </div>
-</section>
+
+    {/* MOBILE (portrait) */}
+    <div className="absolute inset-0 md:hidden">
+      {hasChosenLanguage && (
+        <video
+          key="mobile"
+          src="/videos/vidlanding.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          poster="/images/landing-2.jpg"
+          onPlaying={() => setVideoReady(true)}
+          className="absolute inset-0 w-full h-full object-cover z-0"
+        />
+      )}
+
+      {/* Mobile overlay appears only once video is playing */}
+      {hasChosenLanguage && videoReady && (
+        <motion.div
+          className="absolute inset-0 z-20"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.8, ease: 'easeOut' }}
+        >
+          {/* Slightly smaller width + less padding for mobile */}
+          <div className="absolute left-1/2 -translate-x-1/2 top-[52%] w-[9.5rem]">
+            <input
+              id="last-name"
+              type="text"
+              placeholder="Please enter your last name"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              className="w-full px-2.5 py-1 rounded-xl bg-white/80 text-[10px] text-neutral-900
+                        placeholder:text-neutral-500 border border-white/60 shadow-[0_6px_16px_rgba(0,0,0,0.18)]
+                        backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-white/50 font-dm tracking-wide"
+            />
+          </div>
+
+          <motion.div
+            className="absolute left-1/2 -translate-x-1/2 top-[56%]"
+            animate={{ y: [0, 6, 0] }}
+            transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              className="w-5 h-5"
+              fill="none"
+              stroke="white"
+              strokeWidth="3.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M6 9l6 6 6-6" />
+            </svg>
+          </motion.div>
+        </motion.div>
+      )}
+
+    </div>
+  </section>
+
+
 
       
       {/* second-page-env-opener */}
