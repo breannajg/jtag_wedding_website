@@ -145,7 +145,7 @@ export default function Home() {
       muted
       loop
       playsInline
-      poster="/images/bkgrnd.jpg"
+      poster="/images/landing-2.jpg"
       className="absolute inset-0 w-full h-full object-cover z-0"
     />
     {/* Desktop overlay */}
@@ -182,7 +182,7 @@ export default function Home() {
       muted
       loop
       playsInline
-      poster="/images/bkgrnd-mobile.jpg"
+      poster="/images/landing-2.jpg"
       className="absolute inset-0 w-full h-full object-cover z-0"
     />
     {/* Mobile overlay */}
