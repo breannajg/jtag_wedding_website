@@ -186,14 +186,46 @@ export default function Home() {
           </div>
 
           <motion.div
-            className="absolute left-1/2 -translate-x-1/2 top-[59%]"
-            animate={{ y: [0, 6, 0] }}
-            transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+            onClick={() => {
+              if (!lastName.trim()) {
+                setNeedsName(true);
+                setTimeout(() => setNeedsName(false), 400);
+              } else {
+                handleProceed();
+              }
+            }}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleProceed(); }}
+            aria-label="Proceed"
+            animate={{
+              y: needsName ? [0, -3, 3, -3, 3, 0] : [0, 6, 0],
+            }}
+            transition={{
+              duration: needsName ? 0.4 : 1.6,
+              repeat: needsName ? 0 : Infinity,
+              ease: 'easeInOut',
+            }}
+            className={`absolute left-1/2 -translate-x-1/2 top-[58.5%] select-none
+                        ${!lastName.trim() ? 'opacity-60 cursor-pointer' : 'cursor-pointer'}`}
           >
-            <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute left-1/2 top-1/2 -z-10 -translate-x-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-black/28 blur-md opacity-80"
+            />
+            <svg
+              viewBox="0 0 24 24"
+              className="w-5 h-5 drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]"
+              fill="none"
+              stroke="white"
+              strokeWidth="3.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
               <path d="M6 9l6 6 6-6" />
             </svg>
           </motion.div>
+
         </motion.div>
       )}
 
@@ -239,22 +271,46 @@ export default function Home() {
           </div>
 
           <motion.div
-            className="absolute left-1/2 -translate-x-1/2 top-[56%]"
-            animate={{ y: [0, 6, 0] }}
-            transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+            onClick={() => {
+              if (!lastName.trim()) {
+                setNeedsName(true);
+                setTimeout(() => setNeedsName(false), 400);
+              } else {
+                handleProceed();
+              }
+            }}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleProceed(); }}
+            aria-label="Proceed"
+            animate={{
+              y: needsName ? [0, -3, 3, -3, 3, 0] : [0, 4.5, 0],
+            }}
+            transition={{
+              duration: needsName ? 0.4 : 1.6,
+              repeat: needsName ? 0 : Infinity,
+              ease: 'easeInOut',
+            }}
+            className={`absolute left-1/2 -translate-x-1/2 top-[55.5%] select-none
+                        ${!lastName.trim() ? 'opacity-60 cursor-pointer' : 'cursor-pointer'}`}
           >
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute left-1/2 top-1/2 -z-10 -translate-x-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-black/28 blur-md opacity-80"
+            />
             <svg
-              viewBox="0 0 24 24"
+              viewBox="0 0 22 22"
               className="w-5 h-5"
               fill="none"
               stroke="white"
-              strokeWidth="3.5"
+              strokeWidth="3"
               strokeLinecap="round"
               strokeLinejoin="round"
             >
               <path d="M6 9l6 6 6-6" />
             </svg>
           </motion.div>
+
         </motion.div>
       )}
 
