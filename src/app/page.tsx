@@ -135,161 +135,83 @@ export default function Home() {
         }}
       />
 
-      {/* Nav */}
-      <nav className="fixed top-0 left-0 w-full z-50 flex justify-end px-6 py-4 bg-white/30 backdrop-blur-md">
-        <ul className="flex gap-6 font-dm text-sm md:text-base font-normal text-neutral-800 tracking-wide antialiased">
-          <li>
-            <a href="#home" className="hover:text-neutral-500 transition">
-              {getText('navHome')}
-            </a>
-          </li>
-          <li>
-            <a href="#second-page-env-opener" className="hover:text-neutral-500 transition">
-              {getText('navStory')}
-            </a>
-          </li>
-          <li>
-            <a href="#rsvp" className="hover:text-neutral-500 transition">
-              {getText('navRSVP')}
-            </a>
-          </li>
-        </ul>
-      </nav>
-
-      {/* Hero */}
-      <section id="home" className="relative h-screen w-full overflow-hidden bg-black text-white">
-        {/* Fallback image stays visible until video is decoded */}
-        <Image
-          src="/images/bkgrnd.jpg"
-          alt="The couple"
-          fill
-          priority
-          className={`object-cover absolute inset-0 z-0 transition-opacity duration-500 [will-change:opacity] ${
-            hasChosenLanguage && videoReady ? 'opacity-0' : 'opacity-100'
-          }`}
-        />
-
-        {/* Mount video only after language is chosen; fade it in when ready */}
-        {hasChosenLanguage && (
-          <video
-            key={isMobile ? 'mobile' : 'desktop'} // force reload on breakpoint switch
-            ref={videoRef}
-            src={isMobile ? '/videos/cellenvclosedhighdef.mp4' : '/videos/highdefclosedenv3.mp4'}
-            autoPlay
-            muted
-            loop
-            playsInline
-            poster="/images/bkgrnd.jpg"
-            preload="auto"
-            onLoadedData={() => setVideoReady(true)}
-            className={`absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-500 [will-change:opacity] ${
-              videoReady ? 'opacity-100' : 'opacity-0'
-            }`}
-          />
-        )}
-
-        {/* Title appears only after a language is chosen */}
-        {hasChosenLanguage && (
-          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-4 transform -translate-y-14">
-            <motion.h1
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1 }}
-              className="font-playfair italic text-4xl md:text-5xl tracking-tight drop-shadow-[0_5px_5px_rgba(0,0,0,0.4)]"
-            >
-              {getText('title')}
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.3 }}
-              className="font-playfair italic text-1xl md:text-4xl tracking-tight drop-shadow-[0_4px_2px_rgba(0,0,0,.4)] mt-1"
-            >
-              6-11-26
-            </motion.p>
-
-
-{/* last-name entry */}
-<motion.div
-  initial={{ opacity: 0, y: 10 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.6, delay: 0.45 }}
-  className="mt-3 w-[10.5rem] md:w-[13rem]"
->
-  <motion.label
-    htmlFor="last-name"
-    className="sr-only"
-  >
-    Enter your last name
-  </motion.label>
-
-  <motion.div
-    animate={needsName ? { x: [-6, 6, -4, 4, 0] } : { x: 0 }}
-    transition={{ duration: 0.35, ease: 'easeInOut' }}
-    className="relative"
-  >
-    <input
-      id="last-name"
-      type="text"
-      inputMode="text"
-      autoComplete="family-name"
-      placeholder="Please enter your last name"
-      value={lastName}
-      onChange={(e) => setLastName(e.target.value)}
-      className="w-full px-3 py-1.5 rounded-xl
-                 bg-[rgba(255,255,255,0.82)] md:bg-[rgba(255,255,255,0.76)]
-                 text-[11px] md:text-sm
-                 text-neutral-900 placeholder:text-neutral-500
-                 border border-white/60 shadow-[0_6px_16px_rgba(0,0,0,0.18)]
-                 backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-white/50
-                 font-dm text-base tracking-wide"
-      aria-describedby="last-name-help"
+{/* Hero */}
+<section id="home" className="relative w-full h-screen overflow-hidden bg-black text-white">
+  {/* DESKTOP/TABLET (landscape) */}
+  <div className="absolute inset-0 hidden md:block">
+    <video
+      src="/videos/Y.mp4"
+      autoPlay
+      muted
+      loop
+      playsInline
+      poster="/images/bkgrnd.jpg"
+      className="absolute inset-0 w-full h-full object-cover z-0"
     />
+    {/* Desktop overlay */}
+    <div className="absolute inset-0 z-10">
+      {/* Input */}
+      <div className="absolute left-1/2 -translate-x-1/2 top-[55%] w-[11rem] lg:w-[13rem]">
+        <input
+          id="last-name"
+          type="text"
+          placeholder="Please enter your last name"
+          className="w-full px-3 py-1.5 rounded-xl bg-white/80 text-sm text-neutral-900
+                     placeholder:text-neutral-500 border border-white/60 shadow-[0_6px_16px_rgba(0,0,0,0.18)]
+                     backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-white/50 font-dm tracking-wide"
+        />
+      </div>
+      {/* Carrot */}
+      <motion.div
+        className="absolute left-1/2 -translate-x-1/2 top-[59%]"
+        animate={{ y: [0, 6, 0] }}
+        transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+      >
+        <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M6 9l6 6 6-6" />
+        </svg>
+      </motion.div>
+    </div>
+  </div>
 
-  </motion.div>
-</motion.div>
+  {/* MOBILE (portrait) */}
+  <div className="absolute inset-0 md:hidden">
+    <video
+      src="/videos/vidlanding.mp4"
+      autoPlay
+      muted
+      loop
+      playsInline
+      poster="/images/bkgrnd-mobile.jpg"
+      className="absolute inset-0 w-full h-full object-cover z-0"
+    />
+    {/* Mobile overlay */}
+    <div className="absolute inset-0 z-10">
+      {/* Tweak these % values to your exact frame */}
+      <div className="absolute left-1/2 -translate-x-1/2 top-[52%] w-[10.5rem]">
+        <input
+          id="last-name"
+          type="text"
+          placeholder="Please enter your last name"
+          className="w-full px-3 py-1.5 rounded-xl bg-white/80 text-[11px] text-neutral-900
+                     placeholder:text-neutral-500 border border-white/60 shadow-[0_6px_16px_rgba(0,0,0,0.18)]
+                     backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-white/50 font-dm tracking-wide"
+        />
+      </div>
 
-{/* Subtle hovering carrot (click proceeds) */}
-<motion.div
-  onClick={handleProceed}
-  role="button"
-  tabIndex={0}
-  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleProceed(); }}
-  initial={{ y: 0 }}
-  animate={{ y: [0, 6, 0] }}
-  transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
-  aria-label="Proceed"
-  className="relative mt-2 cursor-pointer select-none appearance-none p-0 border-0 outline-none focus-visible:outline-none"
-  style={{ willChange: 'transform' }}
->
-  {/* soft, classy shadow */}
-  <span
-    aria-hidden="true"
-    className="pointer-events-none absolute left-1/2 top-1/2 -z-10 -translate-x-1/2 -translate-y-1/2
-               h-8 w-8 rounded-full bg-black/28 blur-md opacity-80"
-  />
-  {/* smaller carrot */}
-  <svg
-    viewBox="0 0 24 24"
-    className="w-5 h-5 drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]"
-    fill="none"
-    stroke="white"
-    strokeWidth="3.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M6 9l6 6 6-6" />
-  </svg>
-</motion.div>
+      <motion.div
+        className="absolute left-1/2 -translate-x-1/2 top-[56%]"
+        animate={{ y: [0, 6, 0] }}
+        transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+      >
+        <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M6 9l6 6 6-6" />
+        </svg>
+      </motion.div>
+    </div>
+  </div>
+</section>
 
-
-
-
-
-          </div>
-        )}
-      </section> 
       
       {/* second-page-env-opener */}
       <section id="second-page-env-opener" className="relative min-h-screen flex items-end justify-center pb-8 pb-11">
