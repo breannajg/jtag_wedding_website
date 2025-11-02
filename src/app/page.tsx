@@ -95,7 +95,7 @@ export default function Home() {
         🌎
       </button>
 
-      <section className="relative flex items-center justify-center w-full">
+      <section className="relative flex items-center justify-center w-full px-2 sm:px-0">
         <div className="pr-3 md:pr-5 -mr-3 md:-mr-5">
           <HydrangeaBushel side="left" />
         </div>
@@ -107,11 +107,11 @@ export default function Home() {
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }}
             className="flex flex-col items-center text-[#7C5B2E]"
           >
-            <div className="font-serif text-[36px] md:text-[46px] leading-none tracking-[0.08em]">06</div>
+            <div className="font-serif text-[24px] sm:text-[30px] md:text-[46px] leading-none tracking-[0.08em]">06</div>
             <div className="w-7 md:w-9 h-[1.5px] bg-[#6E4F23]/90 my-1.5 md:my-2" />
-            <div className="font-serif text-[36px] md:text-[46px] leading-none tracking-[0.08em]">11</div>
+            <div className="font-serif text-[24px] sm:text-[30px] md:text-[46px] leading-none tracking-[0.08em]">11</div>
             <div className="w-7 md:w-9 h-[1.5px] bg-[#6E4F23]/90 my-1.5 md:my-2" />
-            <div className="font-serif text-[36px] md:text-[46px] leading-none tracking-[0.08em]">26</div>
+            <div className="font-serif text-[24px] sm:text-[30px] md:text-[46px] leading-none tracking-[0.08em]">26</div>
           </motion.div>
         </div>
 
@@ -314,7 +314,11 @@ function HydrangeaBushel({ side }: { side: "left" | "right" }) {
   const clusters = (side === "left" ? leftCenters : rightCenters).map((c, i) => ({ cx: c.cx, cy: c.cy, radius: c.r, florets: 20 + ((i * 3) % 10), hue: paletteHue + ((i % 4) - 1), phase: 0.05 * i, squash: 0.9 + (i % 3) * 0.01 }));
 
   return (
-    <svg viewBox={side === "left" ? "-190 -120 190 240" : "0 -120 190 240"} className="w-[34vw] max-w-[420px] h-auto" role="img">
+    <svg
+      viewBox={side === "left" ? "-190 -120 190 240" : "0 -120 190 240"}
+      className="w-[44vw] sm:w-[38vw] md:w-[34vw] max-w-[420px] h-auto"
+      role="img"
+    >
       <title>{side === "left" ? "Left hydrangea bushel" : "Right hydrangea bushel"}</title>
       <defs>
         <filter id="petalShade" x="-50%" y="-50%" width="200%" height="200%">
