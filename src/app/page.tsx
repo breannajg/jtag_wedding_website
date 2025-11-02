@@ -121,80 +121,63 @@ export default function Home() {
         <div className="pl-3 md:pl-5 -ml-3 md:-ml-5">
           <HydrangeaBushel side="right" />
         </div>
-      </section>
-{/* SAVE THE DATE SECTION */}
-<motion.h2
-  initial={{ opacity: 0, y: 8 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.8, ease: "easeOut", delay: 0.5 }}
-  className="-mt-4 sm:-mt-10 md:-mt-20 text-[#000000] font-serif
-             text-[26px] md:text-[34px]
-             tracking-[0.12em] md:tracking-[0.22em]
-             text-center [text-shadow:_0_2px_4px_rgba(0,0,0,0.28)]"
-  aria-label="Save the Date"
->
-  {isEnglish ? (
-    // inline-flex wrapper centers all parts evenly
-    <span className="inline-flex items-baseline justify-center
-                     gap-[0.25em] sm:gap-[0.35em] drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]">
-      <span
-        className="inline-block font-vibes"
-        style={{ fontSize: "3.6em", lineHeight: "0.86", textShadow: "0 1px 3px rgba(0,0,0,0.25)" }}
-        
+      </section>{/* SAVE THE DATE SECTION */}
+      {/* SAVE THE DATE SECTION */}
+      <motion.h2
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut", delay: 0.5 }}
+        className="-mt-4 sm:-mt-10 md:-mt-20 text-[#000000] font-serif
+                  text-[26px] md:text-[34px]
+                  tracking-[0.12em] md:tracking-[0.22em]
+                  text-center [text-shadow:_0_2px_4px_rgba(0,0,0,0.28)]"
+        aria-label="Save the Date"
       >
-        S
-      </span>
-      <span>AVE</span>
-      <span
-        className="inline-block font-vibes"
-        style={{ fontSize: "3.6em", lineHeight: "0.86" }}
-      >
-        T
-      </span>
-      <span>HE</span>
-      <span
-        className="inline-block font-vibes"
-        style={{ fontSize: "3.6em", lineHeight: "0.86" }}
-      >
-        D
-      </span>
-      <span>ATE</span>
-    </span>
-  ) : (
-    <span
-      className="inline-block font-cormorant"
-      style={{
-        letterSpacing: "0.08em",
-        textShadow: "0 2px 4px rgba(0,0,0,0.25)",
-      }}
-    >
-      {t.saveTheDate || "Save the Date"}
-    </span>
-  )}
-</motion.h2>
-
-{/* Subtitle: for our wedding */}
-<motion.div
-  initial={{ opacity: 0, y: 10 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.8, ease: "easeOut", delay: 0.8 }}
-  className="mt-2 text-center text-[#000000]"
->
-  <p
-    className="italic text-[20px] md:text-[22px] font-cormorant"
-    style={{ textShadow: "0 1px 3px rgba(0,0,0,0.25)" }}
-  >
-    {t.forOurWedding || "for our wedding"}
-  </p>
-
-  <p
-    className="mt-1 italic font-light text-[20px] md:text-[22px] tracking-wide font-cormorant"
-    style={{ textShadow: "0 1px 3px rgba(0,0,0,0.25)" }}
-  >
-    Amanda&nbsp;George&nbsp;&amp;&nbsp;Jonathan&nbsp;Tiller
-  </p>
-</motion.div>
-
+        {isEnglish ? (
+          // Wrap words naturally on smaller screens
+          <span
+            className="flex flex-wrap justify-center items-baseline gap-[0.25em] sm:gap-[0.35em]
+                      drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)] leading-tight"
+            style={{ maxWidth: "90%", margin: "0 auto" }}
+          >
+            <span
+              className="inline-block font-vibes"
+              style={{
+                fontSize: "3.6em",
+                lineHeight: "0.86",
+                textShadow: "0 1px 3px rgba(0,0,0,0.25)",
+              }}
+            >
+              S
+            </span>
+            <span>AVE</span>
+            <span
+              className="inline-block font-vibes"
+              style={{ fontSize: "3.6em", lineHeight: "0.86" }}
+            >
+              T
+            </span>
+            <span>HE</span>
+            <span
+              className="inline-block font-vibes"
+              style={{ fontSize: "3.6em", lineHeight: "0.86" }}
+            >
+              D
+            </span>
+            <span>ATE</span>
+          </span>
+        ) : (
+          <span
+            className="inline-block font-cormorant"
+            style={{
+              letterSpacing: "0.08em",
+              textShadow: "0 2px 4px rgba(0,0,0,0.25)",
+            }}
+          >
+            {t.saveTheDate || "Save the Date"}
+          </span>
+        )}
+      </motion.h2>
 
       <div className="my-3 w-16 h-[1px] bg-[#bda57a]/70"></div>
 
