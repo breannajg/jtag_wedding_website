@@ -130,7 +130,7 @@ export default function Home() {
   className="-mt-4 sm:-mt-10 md:-mt-20 text-[#000000] font-serif
              text-[26px] md:text-[34px]
              tracking-[0.12em] md:tracking-[0.22em]
-             text-center [text-shadow:_0_2px_4px_rgba(0,0,0,0.28)] w-full"
+             text-center [text-shadow:_0_2px_4px_rgba(0,0,0,0.28)]"
   aria-label="Save the Date"
 >
   {isEnglish ? (
