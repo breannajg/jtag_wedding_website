@@ -90,10 +90,11 @@ export default function Home() {
         aria-label="Change language"
         className="fixed top-3 right-3 z-[1000] p-2 rounded-full text-[#444] text-lg md:text-xl
                   bg-white/50 backdrop-blur-md border border-white/60 shadow-[0_2px_6px_rgba(0,0,0,0.1)]
-                  hover:bg-white/60 active:scale-[0.96] transition"
+                  hover:bg-white/60 active:scale-[0.96] transition cursor-pointer"
       >
         🌎
       </button>
+
 
       <section className="relative flex items-center justify-center w-full px-2 sm:px-0">
         <div className="pr-3 md:pr-5 -mr-3 md:-mr-5">
@@ -105,7 +106,9 @@ export default function Home() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }}
-            className="flex flex-col items-center text-[#7C5B2E]"
+            className="flex flex-col items-center text-[#7C5B2E]
+           [text-shadow:_0_2px_4px_rgba(0,0,0,0.5)]"
+
           >
             <div className="font-serif text-[24px] sm:text-[30px] md:text-[46px] leading-none tracking-[0.08em]">06</div>
             <div className="w-7 md:w-9 h-[1.5px] bg-[#6E4F23]/90 my-1.5 md:my-2" />
@@ -119,60 +122,79 @@ export default function Home() {
           <HydrangeaBushel side="right" />
         </div>
       </section>
-
-      {/* SAVE THE DATE SECTION */}
-      <motion.h2
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut", delay: 0.5 }}
-        className="-mt-6 md:-mt-20 text-[#000000] font-serif text-[26px] md:text-[34px] tracking-[0.14em] md:tracking-[0.22em]"
-
-        aria-label="Save the Date"
+{/* SAVE THE DATE SECTION */}
+<motion.h2
+  initial={{ opacity: 0, y: 8 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.8, ease: "easeOut", delay: 0.5 }}
+  className="-mt-4 sm:-mt-10 md:-mt-20 text-[#000000] font-serif
+             text-[26px] md:text-[34px]
+             tracking-[0.12em] md:tracking-[0.22em]
+             text-center [text-shadow:_0_2px_4px_rgba(0,0,0,0.28)] w-full"
+  aria-label="Save the Date"
+>
+  {isEnglish ? (
+    // inline-flex wrapper centers all parts evenly
+    <span className="inline-flex items-baseline justify-center
+                     gap-[0.25em] sm:gap-[0.35em] drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]">
+      <span
+        className="inline-block font-vibes"
+        style={{ fontSize: "3.6em", lineHeight: "0.86", textShadow: "0 1px 3px rgba(0,0,0,0.25)" }}
+        
       >
-        {isEnglish ? (
-          <>
-            <span
-              className="align-baseline inline-block font-vibes"
-              style={{ fontSize: '3.6em', lineHeight: '0.86' }}
-            >
-              S
-            </span>
-            <span className="ml-1">AVE</span>
-            <span
-              className="align-baseline inline-block font-vibes"
-              style={{ fontSize: '3.6em', lineHeight: '0.86' }}
-            >
-              T
-            </span>
-            <span className="ml-1">HE</span>
-            <span
-              className="align-baseline inline-block font-vibes"
-              style={{ fontSize: '3.6em', lineHeight: '0.86' }}
-            >
-              D
-            </span>
+        S
+      </span>
+      <span>AVE</span>
+      <span
+        className="inline-block font-vibes"
+        style={{ fontSize: "3.6em", lineHeight: "0.86" }}
+      >
+        T
+      </span>
+      <span>HE</span>
+      <span
+        className="inline-block font-vibes"
+        style={{ fontSize: "3.6em", lineHeight: "0.86" }}
+      >
+        D
+      </span>
+      <span>ATE</span>
+    </span>
+  ) : (
+    <span
+      className="inline-block font-cormorant"
+      style={{
+        letterSpacing: "0.08em",
+        textShadow: "0 2px 4px rgba(0,0,0,0.25)",
+      }}
+    >
+      {t.saveTheDate || "Save the Date"}
+    </span>
+  )}
+</motion.h2>
 
-            <span className="ml-1">ATE</span>
-          </>
-        ) : (
-          <span className="inline-block" style={{ fontFamily: '"Cormorant Garamond", serif', letterSpacing: "0.08em" }}>
-            {t.saveTheDate || "Save the Date"}
-          </span>
-        )}
-      </motion.h2>
+{/* Subtitle: for our wedding */}
+<motion.div
+  initial={{ opacity: 0, y: 10 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.8, ease: "easeOut", delay: 0.8 }}
+  className="mt-2 text-center text-[#000000]"
+>
+  <p
+    className="italic text-[20px] md:text-[22px] font-cormorant"
+    style={{ textShadow: "0 1px 3px rgba(0,0,0,0.25)" }}
+  >
+    {t.forOurWedding || "for our wedding"}
+  </p>
 
-      {/* Subtitle: for our wedding */}
-      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: "easeOut", delay: 0.8 }} className="mt-2 text-center text-[#000000]">
-      <p className="italic text-[20px] md:text-[22px] font-cormorant">
-        {t.forOurWedding || "for our wedding"}
-      </p>
+  <p
+    className="mt-1 italic font-light text-[20px] md:text-[22px] tracking-wide font-cormorant"
+    style={{ textShadow: "0 1px 3px rgba(0,0,0,0.25)" }}
+  >
+    Amanda&nbsp;George&nbsp;&amp;&nbsp;Jonathan&nbsp;Tiller
+  </p>
+</motion.div>
 
-
-      <p className="mt-1 italic font-light text-[20px] md:text-[22px] tracking-wide font-cormorant">
-        Amanda&nbsp;George&nbsp;&amp;&nbsp;Jonathan&nbsp;Tiller
-      </p>
-
-      </motion.div>
 
       <div className="my-3 w-16 h-[1px] bg-[#bda57a]/70"></div>
 
@@ -319,7 +341,7 @@ function HydrangeaBushel({ side }: { side: "left" | "right" }) {
       className="w-[44vw] sm:w-[38vw] md:w-[34vw] max-w-[420px] h-auto"
       role="img"
     >
-      <title>{side === "left" ? "Left hydrangea bushel" : "Right hydrangea bushel"}</title>
+      {/* <title>{side === "left" ? "Left hydrangea bushel" : "Right hydrangea bushel"}</title> */}
       <defs>
         <filter id="petalShade" x="-50%" y="-50%" width="200%" height="200%">
           <feDropShadow dx="0" dy="0" stdDeviation="1.0" floodColor="hsl(200 40% 50%)" floodOpacity="0.30" />
