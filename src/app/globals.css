@@ -123,7 +123,8 @@
 
 
 @layer utilities {
-  .font-playfair {
-    font-family: var(--font-playfair), serif;
-  }
+  .font-playfair { font-family: var(--font-playfair), serif;  }
+  .font-cormorant { font-family: var(--font-cormorant), serif; }
+  .font-vibes     { font-family: var(--font-greatvibes), cursive; }
+  .font-dancing   { font-family: var(--font-dancing), cursive; }
 }

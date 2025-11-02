@@ -75,14 +75,32 @@ export default function Home() {
 
   const isEnglish = lang === "en";
 
+  const handleChangeLanguage = () => {
+    try { localStorage.removeItem("site_lang"); } catch {}
+    router.push("/select-language");
+  };
+
+
   return (
     <main className="min-h-screen flex flex-col items-center justify-center bg-[radial-gradient(ellipse_at_center,_#FFFFFF%,_#ece6da_100%)] backdrop-blur-md">
+      
+      {/* Language selector icon (top-right) */}
+      <button
+        onClick={handleChangeLanguage}
+        aria-label="Change language"
+        className="fixed top-3 right-3 z-[1000] p-2 rounded-full text-[#444] text-lg md:text-xl
+                  bg-white/50 backdrop-blur-md border border-white/60 shadow-[0_2px_6px_rgba(0,0,0,0.1)]
+                  hover:bg-white/60 active:scale-[0.96] transition"
+      >
+        🌎
+      </button>
+
       <section className="relative flex items-center justify-center w-full">
         <div className="pr-3 md:pr-5 -mr-3 md:-mr-5">
           <HydrangeaBushel side="left" />
         </div>
 
-        <div aria-label="Wedding Date" className="mx-1 md:mx-2 select-none relative z-10 -translate-y-5.5">
+        <div aria-label="Wedding Date" className="mx-1 md:mx-2 select-none relative z-10 -translate-y-6">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -107,16 +125,33 @@ export default function Home() {
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut", delay: 0.5 }}
-        className="-mt-6 md:-mt-20 text-[#000000] tracking-[0.22em] font-serif text-[26px] md:text-[34px]"
+        className="-mt-6 md:-mt-20 text-[#000000] font-serif text-[26px] md:text-[34px] tracking-[0.14em] md:tracking-[0.22em]"
+
         aria-label="Save the Date"
       >
         {isEnglish ? (
           <>
-            <span className="align-baseline inline-block" style={{ fontFamily: '"Great Vibes","Dancing Script",cursive', fontSize: "3.6em", lineHeight: "0.86" }}>S</span>
+            <span
+              className="align-baseline inline-block font-vibes"
+              style={{ fontSize: '3.6em', lineHeight: '0.86' }}
+            >
+              S
+            </span>
             <span className="ml-1">AVE</span>
-            <span className="ml-3 align-baseline inline-block" style={{ fontFamily: '"Great Vibes","Dancing Script",cursive', fontSize: "3.6em", lineHeight: "0.86" }}>T</span>
+            <span
+              className="align-baseline inline-block font-vibes"
+              style={{ fontSize: '3.6em', lineHeight: '0.86' }}
+            >
+              T
+            </span>
             <span className="ml-1">HE</span>
-            <span className="ml-3 align-baseline inline-block" style={{ fontFamily: '"Great Vibes","Dancing Script",cursive', fontSize: "3.6em", lineHeight: "0.86" }}>D</span>
+            <span
+              className="align-baseline inline-block font-vibes"
+              style={{ fontSize: '3.6em', lineHeight: '0.86' }}
+            >
+              D
+            </span>
+
             <span className="ml-1">ATE</span>
           </>
         ) : (
@@ -128,27 +163,37 @@ export default function Home() {
 
       {/* Subtitle: for our wedding */}
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: "easeOut", delay: 0.8 }} className="mt-2 text-center text-[#000000]">
-        <p className="italic text-[20px] md:text-[22px]" style={{ fontFamily: '"Cormorant Garamond", serif' }}>
-          {t.forOurWedding || "for our wedding"}
-        </p>
-        <p className="mt-1 italic font-light text-[20px] md:text-[22px] tracking-wide" style={{ fontFamily: '"Cormorant Garamond", serif' }}>
-          Amanda&nbsp;George&nbsp;&amp;&nbsp;Jonathan&nbsp;Tiller
-        </p>
+      <p className="italic text-[20px] md:text-[22px] font-cormorant">
+        {t.forOurWedding || "for our wedding"}
+      </p>
+
+
+      <p className="mt-1 italic font-light text-[20px] md:text-[22px] tracking-wide font-cormorant">
+        Amanda&nbsp;George&nbsp;&amp;&nbsp;Jonathan&nbsp;Tiller
+      </p>
+
       </motion.div>
 
       <div className="my-3 w-16 h-[1px] bg-[#bda57a]/70"></div>
 
       <div className="bg-[#FFFFFF]/80 border border-[#FFFFFF]/70 rounded-md px-4 py-3 shadow-sm backdrop-blur-sm italic font-light" style={{ fontFamily: '"Cormorant Garamond", serif' }}>
-        <label htmlFor="lastname" className="block text-[#4e5a5e] text-sm mb-1 tracking-wide italic font-light center">
-          {t.provideLastName || "Provide your last name to Enter"}
-        </label>
-        <input
-          id="lastname"
-          type="text"
-          placeholder={t.lastNamePlaceholder || "Your last name"}
-          className="w-60 md:w-72 px-3 py-2 border border-[#b7c3c9]/80 rounded-sm bg-[#f3f6f8]/90 text-[#334047] placeholder-[#7c8b92] focus:outline-none focus:ring-1 focus:ring-[#aab8bf] italic font-light"
-          style={{ fontFamily: '"Cormorant Garamond", serif' }}
-        />
+       <label
+        htmlFor="lastname"
+        className="block text-[#4e5a5e] text-sm mb-1 tracking-wide italic font-light center font-cormorant"
+      >
+        {t.provideLastName || "Provide your last name to Enter"}
+      </label>
+
+       <input
+        id="lastname"
+        type="text"
+        placeholder={t.lastNamePlaceholder || "Your last name"}
+        className="w-60 md:w-72 px-3 py-2 border border-[#b7c3c9]/80 rounded-sm 
+                  bg-[#f3f6f8]/90 text-[#334047] placeholder-[#7c8b92]
+                  focus:outline-none focus:ring-1 focus:ring-[#aab8bf]
+                  italic font-light font-cormorant"
+      />
+
       </div>
 
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1, y: [0, 6, 0] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 1.2 }} className="mt-6">
