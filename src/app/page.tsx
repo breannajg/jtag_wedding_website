@@ -121,7 +121,7 @@ export default function Home() {
         <div className="pl-3 md:pl-5 -ml-3 md:-ml-5">
           <HydrangeaBushel side="right" />
         </div>
-      </section>{/* SAVE THE DATE SECTION */}
+      </section>
       {/* SAVE THE DATE SECTION */}
       <motion.h2
         initial={{ opacity: 0, y: 8 }}
@@ -134,38 +134,46 @@ export default function Home() {
         aria-label="Save the Date"
       >
         {isEnglish ? (
-          // Wrap words naturally on smaller screens
-          <span
-            className="flex flex-wrap justify-center items-baseline gap-[0.25em] sm:gap-[0.35em]
+          // Block-level wrapper so it can wrap on small screens
+          <div
+            className="w-full max-w-[90vw] mx-auto 
+                      flex flex-wrap justify-center items-baseline
+                      gap-x-[0.35em] gap-y-[0.1em]
                       drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)] leading-tight"
-            style={{ maxWidth: "90%", margin: "0 auto" }}
           >
-            <span
-              className="inline-block font-vibes"
-              style={{
-                fontSize: "3.6em",
-                lineHeight: "0.86",
-                textShadow: "0 1px 3px rgba(0,0,0,0.25)",
-              }}
-            >
-              S
+            {/* SAVE */}
+            <span className="inline-flex items-baseline whitespace-nowrap">
+              <span
+                className="inline-block font-vibes align-baseline"
+                style={{ fontSize: "3.6em", lineHeight: "0.86" }}
+              >
+                S
+              </span>
+              <span className="ml-[0.08em]">AVE</span>
             </span>
-            <span>AVE</span>
-            <span
-              className="inline-block font-vibes"
-              style={{ fontSize: "3.6em", lineHeight: "0.86" }}
-            >
-              T
+
+            {/* THE */}
+            <span className="inline-flex items-baseline whitespace-nowrap">
+              <span
+                className="inline-block font-vibes align-baseline"
+                style={{ fontSize: "3.6em", lineHeight: "0.86" }}
+              >
+                T
+              </span>
+              <span className="ml-[0.08em]">HE</span>
             </span>
-            <span>HE</span>
-            <span
-              className="inline-block font-vibes"
-              style={{ fontSize: "3.6em", lineHeight: "0.86" }}
-            >
-              D
+
+            {/* DATE */}
+            <span className="inline-flex items-baseline whitespace-nowrap">
+              <span
+                className="inline-block font-vibes align-baseline"
+                style={{ fontSize: "3.6em", lineHeight: "0.86" }}
+              >
+                D
+              </span>
+              <span className="ml-[0.08em]">ATE</span>
             </span>
-            <span>ATE</span>
-          </span>
+          </div>
         ) : (
           <span
             className="inline-block font-cormorant"
@@ -179,7 +187,26 @@ export default function Home() {
         )}
       </motion.h2>
 
-      <div className="my-3 w-16 h-[1px] bg-[#bda57a]/70"></div>
+
+      {/* Decorative line under Save the Date */}
+{/* Decorative line under Save the Date */}
+<div className="relative my-6 flex justify-center">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 200 12"
+    className="w-[180px] sm:w-[220px] md:w-[260px] text-[#bda57a]/90"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="0.6"
+  >
+    <path
+      d="M5 6h60c5 0 10-4 15-4s10 4 15 4h10c5 0 10-4 15-4s10 4 15 4h60"
+      strokeLinecap="round"
+    />
+    <circle cx="100" cy="6" r="1.5" fill="currentColor" />
+  </svg>
+</div>
+
 
       <div className="bg-[#FFFFFF]/80 border border-[#FFFFFF]/70 rounded-md px-4 py-3 shadow-sm backdrop-blur-sm italic font-light" style={{ fontFamily: '"Cormorant Garamond", serif' }}>
        <label
