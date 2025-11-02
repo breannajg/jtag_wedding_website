@@ -1,409 +1,328 @@
-'use client'
+// =============================================
+// app/page.tsx  — Landing page (translated)
+// =============================================
+"use client";
 
-import { useEffect, useRef, useState } from 'react'
-import LanguageModal from '@/components/ui/LanguageModal'
-import { motion } from 'framer-motion'
-import Image from 'next/image'
-import { translateText } from '@/utils/translateText'
-
-
-
-
-// Static copy
-const textBlocks = {
-  navHome: 'Home',
-  navStory: 'Our Story',
-  navRSVP: 'RSVP',
-  title: 'Jon & Amanda',
-  storyHeader: 'The Story of Jon & Amanda',
-  story: `Following her graduation, Miss Amanda relocated from her hometown of Chattanooga, Tennessee to the greater Boston area to begin her professional career. Mr. Jon, already established in the city and focused on his own path, would soon find his world altered by Amanda's quiet arrival.
-
-A collegial acquaintance grew into friendship in time, with weekends marked by shared excursions and an ever-deepening ease between them.
-
-During a visit to Provincetown and the Cape Cod National Seashore, what had long remained unspoken quietly emerged. As the sun descended, Mr. Jon stepped away from their group and joined Amanda in stillness. In that moment, Amanda understood her heart.
-
-In 2022, the couple began their courtship. Their relationship is one marked by encouragement, curiosity, and a shared delight in the everyday.
-
-The couple became engaged in March of 2024 and look forward to celebrating their union surrounded by family and cherished friends.`,
-  rsvpHeader: 'RSVP',
-  rsvpText: "We can’t wait to celebrate with you! Please let us know if you'll be attending.",
-}
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+import { translateText } from "@/utils/translateText";
 
 export default function Home() {
-  const [language, setLanguage] = useState('')
-  const [hasChosenLanguage, setHasChosenLanguage] = useState(false)
-  const [translated, setTranslated] = useState<Record<string, string>>({})
-  const [lastName, setLastName] = useState('');
-  const [needsName, setNeedsName] = useState(false);
-  const isDev = process.env.NODE_ENV === 'development'
+  const router = useRouter();
+  const [lang, setLang] = useState<string>("en");
+  const [ready, setReady] = useState(false); // prevent flicker while checking lang
+  const [t, setT] = useState<{ [k: string]: string }>({});
 
-  // Video fade-in control
-  const videoRef = useRef<HTMLVideoElement>(null)
-  const [videoReady, setVideoReady] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
+  // Gate: if no language chosen, go to /select-language
   useEffect(() => {
-    if (typeof window === 'undefined') return
-    const mql = window.matchMedia('(max-width: 768px)')
-    const onChange = (e: MediaQueryListEvent | MediaQueryList) =>
-      setIsMobile('matches' in e ? e.matches : (e as MediaQueryList).matches)
+    const saved = typeof window !== "undefined" ? localStorage.getItem("site_lang") : null;
+    if (!saved) {
+      router.replace("/select-language");
+      return; // don't mark ready; we'll navigate away
+    }
+    setLang(saved);
+    setReady(true);
+  }, [router]);
 
-    // set initial
-    setIsMobile(mql.matches)
-
-    // listen for changes
-    mql.addEventListener?.('change', onChange)
-    mql.addListener?.(onChange) // fallback
+  // Load translations whenever lang changes
+  useEffect(() => {
+    let alive = true;
+    async function run() {
+      if (lang === "en") {
+        if (!alive) return;
+        setT({
+          saveTheDate: "Save the Date",
+          forOurWedding: "for our wedding",
+          provideLastName: "Provide your last name to Enter",
+          lastNamePlaceholder: "Your last name",
+        });
+        return;
+      }
+      const phrases = [
+        "Save the Date",
+        "for our wedding",
+        "Provide your last name to Enter",
+        "Your last name",
+      ];
+      try {
+        const results = await Promise.all(phrases.map((p) => translateText(p, lang)));
+        if (!alive) return;
+        setT({
+          saveTheDate: results[0],
+          forOurWedding: results[1],
+          provideLastName: results[2],
+          lastNamePlaceholder: results[3],
+        });
+      } catch (e) {
+        if (!alive) return;
+        setT({
+          saveTheDate: "Save the Date",
+          forOurWedding: "for our wedding",
+          provideLastName: "Provide your last name to Enter",
+          lastNamePlaceholder: "Your last name",
+        });
+        console.error("Translation error:", e);
+      }
+    }
+    run();
     return () => {
-      mql.removeEventListener?.('change', onChange)
-      mql.removeListener?.(onChange) // fallback
-    }
-  }, [])
+      alive = false;
+    };
+  }, [lang]);
 
+  if (!ready) return null; // avoid layout flash while deciding
 
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const cached = localStorage.getItem('guest-last-name');
-    if (cached) setLastName(cached);
-  }, []);
-
-  const handleProceed = () => {
-    if (!lastName.trim()) {
-      setNeedsName(true);
-      setTimeout(() => setNeedsName(false), 400); // reset shake
-      return;
-    }
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('guest-last-name', lastName.trim());
-    }
-    document.getElementById('second-page-env-opener')?.scrollIntoView({ behavior: 'smooth' });
-  };
-  
-
-  useEffect(() => {
-    if (!hasChosenLanguage) return
-
-    if (language === 'English') {
-      setTranslated({})
-      return
-    }
-
-    const translateAll = async () => {
-      const newTranslations: Record<string, string> = {}
-
-      if (isDev && typeof window !== 'undefined') {
-        Object.keys(localStorage).forEach((key) => {
-          if (key.startsWith('translation-')) localStorage.removeItem(key)
-        })
-      }
-
-      for (const key in textBlocks) {
-        const originalText = textBlocks[key as keyof typeof textBlocks]
-        const cacheKey = `translation-${language}-${key}`
-
-        if (!isDev && typeof window !== 'undefined') {
-          const cached = localStorage.getItem(cacheKey)
-          if (cached) {
-            newTranslations[key] = cached
-            continue
-          }
-        }
-
-        const translatedText = await translateText(originalText, language)
-        newTranslations[key] = translatedText
-
-        if (!isDev && typeof window !== 'undefined') {
-          localStorage.setItem(cacheKey, translatedText)
-        }
-      }
-
-      setTranslated(newTranslations)
-    }
-
-    translateAll()
-  }, [language, hasChosenLanguage, isDev])
-
-  const getText = (key: keyof typeof textBlocks) =>
-    translated[key] || textBlocks[key]
+  const isEnglish = lang === "en";
 
   return (
-    <>
-      <LanguageModal
-        onSelect={(lang) => {
-          setLanguage(lang)
-          setHasChosenLanguage(true)
-          setVideoReady(false) // reset fade if language changes later
-        }}
-      />
+    <main className="min-h-screen flex flex-col items-center justify-center bg-[radial-gradient(ellipse_at_center,_#FFFFFF%,_#ece6da_100%)] backdrop-blur-md">
+      <section className="relative flex items-center justify-center w-full">
+        <div className="pr-3 md:pr-5 -mr-3 md:-mr-5">
+          <HydrangeaBushel side="left" />
+        </div>
 
-  {/* Hero */}
-  <section id="home" className="relative w-full h-screen overflow-hidden bg-black text-white">
-    {/* Poster stays on top until video is playing */}
-    <Image
-      src="/images/landing-2.jpg"
-      alt="Invitation background"
-      fill
-      priority
-      className={`absolute inset-0 object-cover transition-opacity duration-500 z-10
-                  ${!hasChosenLanguage || !videoReady ? 'opacity-100' : 'opacity-0'}`}
-    />
-
-    {/* DESKTOP/TABLET (landscape) */}
-    <div className="absolute inset-0 hidden md:block">
-      {hasChosenLanguage && (
-        <video
-          key="desktop"
-          src="/videos/Y.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          poster="/images/landing-2.jpg"
-          onPlaying={() => setVideoReady(true)}
-          className="absolute inset-0 w-full h-full object-cover z-0"
-        />
-      )}
-
-      {/* Desktop overlay appears only once video is playing */}
-      {hasChosenLanguage && videoReady && (
-        <motion.div
-          className="absolute inset-0 z-20"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.8, ease: 'easeOut' }}  // <-- slower fade-in
-        >
-          <div className="absolute left-1/2 -translate-x-1/2 top-[55%] w-[11rem] lg:w-[13rem]">
-            <input
-              id="last-name"
-              type="text"
-              placeholder="Please enter your last name"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              className="w-full px-3 py-1.5 rounded-xl bg-white/80 text-sm text-neutral-900
-                        placeholder:text-neutral-500 border border-white/60 shadow-[0_6px_16px_rgba(0,0,0,0.18)]
-                        backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-white/50 font-dm tracking-wide"
-            />
-          </div>
-
+        <div aria-label="Wedding Date" className="mx-1 md:mx-2 select-none relative z-10 -translate-y-5.5">
           <motion.div
-            onClick={() => {
-              if (!lastName.trim()) {
-                setNeedsName(true);
-                setTimeout(() => setNeedsName(false), 400);
-              } else {
-                handleProceed();
-              }
-            }}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleProceed(); }}
-            aria-label="Proceed"
-            animate={{
-              y: needsName ? [0, -3, 3, -3, 3, 0] : [0, 6, 0],
-            }}
-            transition={{
-              duration: needsName ? 0.4 : 1.6,
-              repeat: needsName ? 0 : Infinity,
-              ease: 'easeInOut',
-            }}
-            className={`absolute left-1/2 -translate-x-1/2 top-[58.5%] select-none
-                        ${!lastName.trim() ? 'opacity-60 cursor-pointer' : 'cursor-pointer'}`}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }}
+            className="flex flex-col items-center text-[#7C5B2E]"
           >
-            <span
-              aria-hidden="true"
-              className="pointer-events-none absolute left-1/2 top-1/2 -z-10 -translate-x-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-black/28 blur-md opacity-80"
-            />
-            <svg
-              viewBox="0 0 24 24"
-              className="w-5 h-5 drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]"
-              fill="none"
-              stroke="white"
-              strokeWidth="3.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M6 9l6 6 6-6" />
-            </svg>
+            <div className="font-serif text-[36px] md:text-[46px] leading-none tracking-[0.08em]">06</div>
+            <div className="w-7 md:w-9 h-[1.5px] bg-[#6E4F23]/90 my-1.5 md:my-2" />
+            <div className="font-serif text-[36px] md:text-[46px] leading-none tracking-[0.08em]">11</div>
+            <div className="w-7 md:w-9 h-[1.5px] bg-[#6E4F23]/90 my-1.5 md:my-2" />
+            <div className="font-serif text-[36px] md:text-[46px] leading-none tracking-[0.08em]">26</div>
           </motion.div>
+        </div>
 
-        </motion.div>
-      )}
+        <div className="pl-3 md:pl-5 -ml-3 md:-ml-5">
+          <HydrangeaBushel side="right" />
+        </div>
+      </section>
 
-    </div>
-
-    {/* MOBILE (portrait) */}
-    <div className="absolute inset-0 md:hidden">
-      {hasChosenLanguage && (
-        <video
-          key="mobile"
-          src="/videos/vidlanding.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          poster="/images/landing-2.jpg"
-          onPlaying={() => setVideoReady(true)}
-          className="absolute inset-0 w-full h-full object-cover z-0"
-        />
-      )}
-
-      {/* Mobile overlay appears only once video is playing */}
-      {hasChosenLanguage && videoReady && (
-        <motion.div
-          className="absolute inset-0 z-20"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.8, ease: 'easeOut' }}
-        >
-          {/* Slightly smaller width + less padding for mobile */}
-          <div className="absolute left-1/2 -translate-x-1/2 top-[52%] w-[9.5rem]">
-            <input
-              id="last-name"
-              type="text"
-              placeholder="Please enter your last name"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              className="w-full px-2.5 py-1 rounded-xl bg-white/80 text-[10px] text-neutral-900
-                        placeholder:text-neutral-500 border border-white/60 shadow-[0_6px_16px_rgba(0,0,0,0.18)]
-                        backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-white/50 font-dm tracking-wide"
-            />
-          </div>
-
-          <motion.div
-            onClick={() => {
-              if (!lastName.trim()) {
-                setNeedsName(true);
-                setTimeout(() => setNeedsName(false), 400);
-              } else {
-                handleProceed();
-              }
-            }}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleProceed(); }}
-            aria-label="Proceed"
-            animate={{
-              y: needsName ? [0, -3, 3, -3, 3, 0] : [0, 4.5, 0],
-            }}
-            transition={{
-              duration: needsName ? 0.4 : 1.6,
-              repeat: needsName ? 0 : Infinity,
-              ease: 'easeInOut',
-            }}
-            className={`absolute left-1/2 -translate-x-1/2 top-[55.5%] select-none
-                        ${!lastName.trim() ? 'opacity-60 cursor-pointer' : 'cursor-pointer'}`}
-          >
-            <span
-              aria-hidden="true"
-              className="pointer-events-none absolute left-1/2 top-1/2 -z-10 -translate-x-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-black/28 blur-md opacity-80"
-            />
-            <svg
-              viewBox="0 0 22 22"
-              className="w-5 h-5"
-              fill="none"
-              stroke="white"
-              strokeWidth="3"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M6 9l6 6 6-6" />
-            </svg>
-          </motion.div>
-
-        </motion.div>
-      )}
-
-    </div>
-  </section>
-
-
-
-      
-      {/* second-page-env-opener */}
-      <section id="second-page-env-opener" className="relative min-h-screen flex items-end justify-center pb-8 pb-11">
-
-        <Image
-          src="/images/bkgrnd.jpg"
-          alt="The couple"
-          fill
-          priority
-          className={`object-cover absolute inset-0 z-0 transition-opacity duration-500 [will-change:opacity] ${
-            hasChosenLanguage && videoReady ? 'opacity-0' : 'opacity-100'
-          }`}
-        />
-
-        {/* Mount video only after language is chosen; fade it in when ready */}
-        {hasChosenLanguage && (
-          <video
-            key={isMobile ? 'mobile' : 'desktop'} // force reload on breakpoint switch
-            ref={videoRef}
-            src={isMobile ? '/videos/openedenvfinal.mp4' : '/videos/openedenvfinal.mp4'}
-            autoPlay
-            muted
-            loop
-            playsInline
-            poster="/images/bkgrnd.jpg"
-            preload="auto"
-            onLoadedData={() => setVideoReady(true)}
-            className={`absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-500 [will-change:opacity] ${
-              videoReady ? 'opacity-100' : 'opacity-0'
-            }`}
-          />
-          
+      {/* SAVE THE DATE SECTION */}
+      <motion.h2
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut", delay: 0.5 }}
+        className="-mt-6 md:-mt-20 text-[#000000] tracking-[0.22em] font-serif text-[26px] md:text-[34px]"
+        aria-label="Save the Date"
+      >
+        {isEnglish ? (
+          <>
+            <span className="align-baseline inline-block" style={{ fontFamily: '"Great Vibes","Dancing Script",cursive', fontSize: "3.6em", lineHeight: "0.86" }}>S</span>
+            <span className="ml-1">AVE</span>
+            <span className="ml-3 align-baseline inline-block" style={{ fontFamily: '"Great Vibes","Dancing Script",cursive', fontSize: "3.6em", lineHeight: "0.86" }}>T</span>
+            <span className="ml-1">HE</span>
+            <span className="ml-3 align-baseline inline-block" style={{ fontFamily: '"Great Vibes","Dancing Script",cursive', fontSize: "3.6em", lineHeight: "0.86" }}>D</span>
+            <span className="ml-1">ATE</span>
+          </>
+        ) : (
+          <span className="inline-block" style={{ fontFamily: '"Cormorant Garamond", serif', letterSpacing: "0.08em" }}>
+            {t.saveTheDate || "Save the Date"}
+          </span>
         )}
+      </motion.h2>
+
+      {/* Subtitle: for our wedding */}
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: "easeOut", delay: 0.8 }} className="mt-2 text-center text-[#000000]">
+        <p className="italic text-[20px] md:text-[22px]" style={{ fontFamily: '"Cormorant Garamond", serif' }}>
+          {t.forOurWedding || "for our wedding"}
+        </p>
+        <p className="mt-1 italic font-light text-[20px] md:text-[22px] tracking-wide" style={{ fontFamily: '"Cormorant Garamond", serif' }}>
+          Amanda&nbsp;George&nbsp;&amp;&nbsp;Jonathan&nbsp;Tiller
+        </p>
+      </motion.div>
+
+      <div className="my-3 w-16 h-[1px] bg-[#bda57a]/70"></div>
+
+      <div className="bg-[#FFFFFF]/80 border border-[#FFFFFF]/70 rounded-md px-4 py-3 shadow-sm backdrop-blur-sm italic font-light" style={{ fontFamily: '"Cormorant Garamond", serif' }}>
+        <label htmlFor="lastname" className="block text-[#4e5a5e] text-sm mb-1 tracking-wide italic font-light center">
+          {t.provideLastName || "Provide your last name to Enter"}
+        </label>
+        <input
+          id="lastname"
+          type="text"
+          placeholder={t.lastNamePlaceholder || "Your last name"}
+          className="w-60 md:w-72 px-3 py-2 border border-[#b7c3c9]/80 rounded-sm bg-[#f3f6f8]/90 text-[#334047] placeholder-[#7c8b92] focus:outline-none focus:ring-1 focus:ring-[#aab8bf] italic font-light"
+          style={{ fontFamily: '"Cormorant Garamond", serif' }}
+        />
+      </div>
+
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1, y: [0, 6, 0] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 1.2 }} className="mt-6">
+        <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 md:w-7 md:h-7 text-[#7C5B2E]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.6">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+        </svg>
+      </motion.div>
+    </main>
+  );
+}
 
 
+function Leaf({
+  x,
+  y,
+  angle = 0,
+  size = 12,
+  hue = 130,
+  jitter = 0,
+}: {
+  x: number
+  y: number
+  angle?: number
+  size?: number
+  hue?: number
+  jitter?: number
+}) {
+  const l = size;
+  const j = jitter;
+  const d = [
+    `M 0 0`,
+    `C ${0.45 * l} ${-0.35 * l + j}, ${0.95 * l} ${-0.15 * l}, ${l} 0`,
+    `C ${0.95 * l} ${0.18 * l}, ${0.45 * l} ${0.35 * l - j}, 0 0`,
+    'Z',
+  ].join(' ');
+  return (
+    <g transform={`translate(${x} ${y}) rotate(${angle})`}>
+      <path
+        d={d}
+        fill={`hsl(${hue} 14% 62%)`}  // muted grey-green
+        stroke={`hsl(${hue} 10% 55%)`}
+        strokeWidth="0.25"
+        opacity="0.45"
+        style={{ filter: 'blur(0.3px)' }}
+      />
+      <path
+        d={`M 0 0 C ${0.5 * l} ${-0.08 * l}, ${0.7 * l} ${-0.02 * l}, ${l * 0.95} 0`}
+        fill="none"
+        stroke={`hsl(${hue} 8% 48%)`}
+        strokeWidth="0.3"
+        strokeLinecap="round"
+        opacity="0.25"
+      />
+    </g>
+  );
+}
 
-  <div className="z-10 w-full px-4">
-    <div className="mx-auto max-w-md text-center">
-      <h2 className="font-playfair italic text-2xl md:text-3xl tracking-tight drop-shadow-[0_5px_3px_rgba(0,0,0,0.4)]">
-        You are Invited!
-      </h2>
-      {/* <button className="bg-black text-white px-6 py-3 rounded-full hover:bg-neutral-800 transition mt-3">
-        RSVP Form Coming Soon
-      </button> */}
+/* =========================
+   HYDRANGEA BUSHEL (side) — unchanged
+   ========================= */
+function HydrangeaBushel({ side }: { side: "left" | "right" }) {
+  const floretTransition = { type: "spring" as const, stiffness: 200, damping: 18 };
+  const bloomTransition = { type: "spring" as const, stiffness: 160, damping: 20 };
 
-<button
-  className="font-playfair tracking-normal
-             text-[15px] md:text-base text-neutral-900
-             px-4 py-2 rounded-full
-             bg-white/40 backdrop-blur-md
-             border border-white/50
-             shadow-[0_2px_10px_rgba(0,0,0,0.2)]
-             hover:bg-white/50 hover:border-white/60
-             focus:outline-none focus:ring-2 focus:ring-black/20
-             transition mt-4"
->
-  RSVP Form Coming Soon
-</button>
+  const Floret = ({ x, y, index, size = 1, hue }: { x: number; y: number; index: number; size?: number; hue: number }) => {
+    const rot = (index * 37) % 360;
+    const pSize = 4.4 * size;
+    const gap = 1.9 * size;
+    const light = 72 + ((index * 7) % 8) - 4;
+    const sat = 28 + ((index * 5) % 8);
 
+    return (
+      <motion.g initial={{ opacity: 0, scale: 0.3 }} animate={{ opacity: 1, scale: 1 }} transition={{ ...floretTransition, delay: 0.1 + index * 0.012 }}>
+        {[0, 1, 2, 3].map((i) => {
+          const a = (i * 90 + rot) * (Math.PI / 180);
+          const px = x + Math.cos(a) * gap;
+          const py = y + Math.sin(a) * gap;
+          return (
+            <ellipse key={i} cx={px} cy={py} rx={pSize} ry={pSize * 0.84} transform={`rotate(${i * 90 + rot} ${px} ${py})`} fill={`hsl(${hue} ${sat}% ${light}%)`} stroke={`hsl(${hue} 34% 52%)`} strokeWidth="0.55" strokeOpacity={0.38} filter="url(#petalShade)" />
+          );
+        })}
+        <circle cx={x} cy={y} r={1.05 * size} fill="hsl(45 42% 72%)" />
+      </motion.g>
+    );
+  };
 
+  const BloomCluster = ({ cx, cy, radius, floretCount, hue, squash = 0.9, phase = 0 }: { cx: number; cy: number; radius: number; floretCount: number; hue: number; squash?: number; phase?: number }) => (
+    <motion.g initial={{ opacity: 0, scale: 0.6, filter: "blur(2.5px)" }} animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }} transition={bloomTransition}>
+      <motion.g animate={{ y: [0, -1.6, 0, 1.2, 0] }} transition={{ duration: 6.5, repeat: Infinity, ease: "easeInOut", delay: phase }}>
+        {Array.from({ length: floretCount }).map((_, i) => {
+          const ang = i * Math.PI * (3 - Math.sqrt(5));
+          const t = i / floretCount;
+          const r = radius * Math.sqrt(t) * 0.82;
+          const x = cx + Math.cos(ang) * r;
+          const y = cy + Math.sin(ang) * r * squash;
+          return <Floret key={i} x={x} y={y} index={i} size={0.86 + t * 0.16} hue={hue} />;
+        })}
+      </motion.g>
+    </motion.g>
+  );
 
+  const leftCenters = [
+    { cx: -22, cy: -50, r: 22 },
+    { cx: -112, cy: -46, r: 25 },
+    { cx: -62, cy: -32, r: 26 },
+    { cx: -130, cy: -26, r: 22 },
+    { cx: -30, cy: -12, r: 25 },
+    { cx: -116, cy: -8, r: 24 },
+    { cx: -70, cy: 6, r: 20 },
+    { cx: -136, cy: 10, r: 24 },
+    { cx: -34, cy: 22, r: 24 },
+    { cx: -104, cy: 26, r: 23 },
+  ];
 
-    </div>
-  </div>
-      </section>
+  const rightCenters = leftCenters.map((c, i) => ({ cx: -c.cx + (i % 3 === 0 ? 2 : -2), cy: c.cy + (i % 4 === 0 ? -1 : 1), r: c.r + (i % 5 === 0 ? 1 : 0) }));
 
-      {/* RSVP */}
-      <section id="rsvp" className="relative w-full min-h-screen flex flex-col md:flex-row overflow-hidden">
-        <div className="relative w-full md:w-1/2 min-h-[400px] md:min-h-screen">
-          <Image src="/images/rsvp.jpg" alt="RSVP" fill className="object-cover" priority />
-        </div>
-        <div className="flex items-center justify-center w-full md:w-1/2 bg-white text-black px-6 py-20 md:py-0">
-          <div className="max-w-lg text-center">
-            <h2 className="text-3xl md:text-4xl font-serif mb-8">
-              lalala
-            </h2>
-            <p className="text-lg mb-6">
-              another section
-            </p>
-            <button className="bg-black text-white px-6 py-3 rounded-full hover:bg-neutral-800 transition">
-              a button.
-            </button>
-          </div>
-        </div>
-      </section>
-    </>
-  )
+  const paletteHue = side === "left" ? 198 : 201;
+  const clusters = (side === "left" ? leftCenters : rightCenters).map((c, i) => ({ cx: c.cx, cy: c.cy, radius: c.r, florets: 20 + ((i * 3) % 10), hue: paletteHue + ((i % 4) - 1), phase: 0.05 * i, squash: 0.9 + (i % 3) * 0.01 }));
+
+  return (
+    <svg viewBox={side === "left" ? "-190 -120 190 240" : "0 -120 190 240"} className="w-[34vw] max-w-[420px] h-auto" role="img">
+      <title>{side === "left" ? "Left hydrangea bushel" : "Right hydrangea bushel"}</title>
+      <defs>
+        <filter id="petalShade" x="-50%" y="-50%" width="200%" height="200%">
+          <feDropShadow dx="0" dy="0" stdDeviation="1.0" floodColor="hsl(200 40% 50%)" floodOpacity="0.30" />
+        </filter>
+        <linearGradient id="pageBottomFade" x1="0" y1="-120" x2="0" y2="120" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="white" stopOpacity="1" />
+          <stop offset="80%" stopColor="white" stopOpacity="1" />
+          <stop offset="100%" stopColor="white" stopOpacity="0" />
+        </linearGradient>
+        <mask id="bottomFadeMask">
+          <rect x="-200" y="-120" width="400" height="240" fill="url(#pageBottomFade)" />
+        </mask>
+        <linearGradient id="stemFillWithFade" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0%" stopColor="hsl(130 25% 34%)" stopOpacity="0.9" />
+          <stop offset="70%" stopColor="hsl(130 29% 31%)" stopOpacity="0.9" />
+          <stop offset="100%" stopColor="hsl(130 32% 28%)" stopOpacity="0.88" />
+        </linearGradient>
+        <linearGradient id="stemVein" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0%" stopColor="hsl(130 18% 22%)" />
+          <stop offset="100%" stopColor="hsl(130 22% 26%)" />
+        </linearGradient>
+      </defs>
+
+      <motion.g initial={{ opacity: 0 }} animate={{ opacity: 0.9, rotate: [-1, 1, -1], y: [0, 1.5, 0] }} transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 0.3 }} style={{ mixBlendMode: "multiply" }}>
+        {(side === "left"
+          ? [
+              { x: -152, y: -46, angle: -14, size: 32, jitter: 1 },
+              { x: -124, y: 14, angle: -8, size: 30, jitter: 0.5 },
+              { x: -86, y: -58, angle: 10, size: 28, jitter: 1.2 },
+              { x: -48, y: 6, angle: 20, size: 24, jitter: 0.6 },
+              { x: -132, y: 40, angle: -26, size: 26, jitter: 1.1 },
+            ]
+          : [
+              { x: 122, y: -50, angle: 10, size: 32, jitter: 1 },
+              { x: 116, y: 10, angle: 6, size: 30, jitter: 0.5 },
+              { x: 78, y: -60, angle: -14, size: 30, jitter: 1.1 },
+              { x: 44, y: 4, angle: -24, size: 24, jitter: 0.6 },
+              { x: 120, y: 36, angle: 22, size: 28, jitter: 1.1 },
+            ]).map((L, i) => (
+          <g key={`leaf-${side}-${i}`} opacity={0.85}>
+            <Leaf x={L.x} y={L.y} angle={L.angle} size={L.size} hue={120} jitter={L.jitter} />
+            <Leaf x={L.x + (side === "left" ? -6 : -9)} y={L.y + 5} angle={L.angle + (side === "left" ? -8 : 8)} size={L.size * 0.8} hue={118} jitter={L.jitter * 0.6} />
+          </g>
+        ))}
+      </motion.g>
+
+      <motion.g animate={{ y: [0, -1, 0, 0.8, 0] }} transition={{ duration: 7.5, repeat: Infinity, ease: "easeInOut" }}>
+        <g mask="url(#bottomFadeMask)"></g>
+        {clusters.map((c, i) => (
+          <BloomCluster key={`c-${i}`} cx={c.cx} cy={c.cy} radius={c.radius} floretCount={c.florets} hue={c.hue} squash={c.squash} phase={c.phase} />
+        ))}
+      </motion.g>
+    </svg>
+  );
 }
