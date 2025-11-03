@@ -98,25 +98,26 @@ export default function Home() {
 
 
 
-{/* VIDEO BACKDROP SECTION (now truly in the background) */}
+{/* VIDEO BACKDROP SECTION (mobile-resizes correctly) */}
 <div
   aria-hidden="true"
-  className="fixed inset-0 -z-10 overflow-hidden pointer-events-none"
+  className="fixed left-0 top-0 -z-10 w-[100vw] h-[100svh] overflow-hidden pointer-events-none md:h-full md:inset-0"
 >
   <video
     autoPlay
     loop
     muted
     playsInline
-    className="w-full h-full object-cover"
+    // Force fill on both axes; object-cover keeps it pretty
+    className="min-w-full min-h-full w-auto h-auto object-cover object-center"
   >
     <source src="/videos/hydrangeavid.mp4" type="video/mp4" />
     Your browser does not support the video tag.
   </video>
 
-  {/* Soft readability gradient (doesn't block clicks) */}
   <div className="absolute inset-0 bg-gradient-to-b from-white/0 via-white/10 to-white/70" />
 </div>
+
 
 
 
