@@ -33,7 +33,7 @@ export default function Home() {
         if (!alive) return;
         setT({
           saveTheDate: "Save the Date",
-          forOurWedding: "for our wedding",
+          forOurWedding: "for our wedding in Rhode Island",
           provideLastName: "Provide your last name to Enter",
           lastNamePlaceholder: "Your last name",
         });
@@ -41,7 +41,7 @@ export default function Home() {
       }
       const phrases = [
         "Save the Date",
-        "for our wedding",
+        "for our wedding in Rhode Island",
         "Provide your last name to Enter",
         "Your last name",
       ];
@@ -58,7 +58,7 @@ export default function Home() {
         if (!alive) return;
         setT({
           saveTheDate: "Save the Date",
-          forOurWedding: "for our wedding",
+          forOurWedding: "for our wedding in Rhode Island",
           provideLastName: "Provide your last name to Enter",
           lastNamePlaceholder: "Your last name",
         });
@@ -82,7 +82,7 @@ export default function Home() {
 
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-[radial-gradient(ellipse_at_center,_#FFFFFF%,_#ece6da_100%)] backdrop-blur-md">
+    <main className="relative min-h-screen flex flex-col items-center justify-center bg-[radial-gradient(ellipse_at_center,_#FFFFFF%,_#ece6da_100%)] backdrop-blur-md">
       
       {/* Language selector icon (top-right) */}
       <button
@@ -98,26 +98,29 @@ export default function Home() {
 
 
 
-{/* VIDEO BACKDROP SECTION */}
-<section className="relative w-full flex items-center justify-center overflow-hidden">
+{/* VIDEO BACKDROP SECTION (now truly in the background) */}
+<div
+  aria-hidden="true"
+  className="fixed inset-0 -z-10 overflow-hidden pointer-events-none"
+>
   <video
     autoPlay
     loop
     muted
     playsInline
-    className="w-full h-auto object-cover max-h-[80vh]"
+    className="w-full h-full object-cover"
   >
     <source src="/videos/hydrangeavid.mp4" type="video/mp4" />
     Your browser does not support the video tag.
   </video>
 
-  {/* Overlay gradient for readability (optional) */}
-  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/10 to-white/70 pointer-events-none" />
-</section>
+  {/* Soft readability gradient (doesn't block clicks) */}
+  <div className="absolute inset-0 bg-gradient-to-b from-white/0 via-white/10 to-white/70" />
+</div>
 
 
 
-
+<div className="mt-[65vh]">
       {/* SAVE THE DATE SECTION */}
       <motion.h2
         initial={{ opacity: 0, y: 8 }}
@@ -137,6 +140,8 @@ export default function Home() {
                       gap-x-[1em] gap-y-[0.1em]
                       drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)] leading-tight"
           >
+
+            
             {/* SAVE */}
             <span className="inline-flex items-baseline whitespace-nowrap">
               <span
@@ -190,11 +195,10 @@ export default function Home() {
   transition={{ duration: 0.8, ease: "easeOut", delay: 0.7 }}
   className="text-center mt-2 md:mt-4"
 >
-  <p
-    className="italic text-[#3e3e3e] font-cormorant text-[17px] md:text-[20px] leading-snug"
-  >
-    for our wedding in Rhode Island
-  </p>
+<p className="italic text-[#3e3e3e] font-cormorant text-[17px] md:text-[20px] leading-snug">
+  {t.forOurWedding || "for our wedding in Rhode Island"}
+</p>
+
   <p
     className="mt-1 text-[#2a2a2a] font-cormorant text-[17px] md:text-[20px] tracking-wide"
   >
@@ -202,7 +206,7 @@ export default function Home() {
   </p>
 </motion.div>
 
-
+</div>
 {/* Decorative line under Save the Date */}
 <div className="relative my-6 flex justify-center">
   <svg
