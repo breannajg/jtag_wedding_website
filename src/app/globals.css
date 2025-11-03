@@ -1,5 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Miss+Fajardose&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
+
 
 @custom-variant dark (&:is(.dark *));
 
@@ -127,4 +129,12 @@
   .font-cormorant { font-family: var(--font-cormorant), serif; }
   .font-vibes     { font-family: var(--font-greatvibes), cursive; }
   .font-dancing   { font-family: var(--font-dancing), cursive; }
+  .font-fajardose { font-family: 'Miss Fajardose', cursive; }
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  -webkit-text-size-adjust: 100%;
 }

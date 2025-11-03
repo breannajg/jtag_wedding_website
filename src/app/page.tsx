@@ -96,39 +96,35 @@ export default function Home() {
       </button>
 
 
-      <section className="relative flex items-center justify-center w-full px-2 sm:px-0">
-        <div className="pr-3 md:pr-5 -mr-3 md:-mr-5">
-          <HydrangeaBushel side="left" />
-        </div>
 
-        <div aria-label="Wedding Date" className="mx-1 md:mx-2 select-none relative z-10 -translate-y-6">
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }}
-            className="flex flex-col items-center text-[#7C5B2E]
-           [text-shadow:_0_2px_4px_rgba(0,0,0,0.5)]"
 
-          >
-            <div className="font-serif text-[24px] sm:text-[30px] md:text-[46px] leading-none tracking-[0.08em]">06</div>
-            <div className="w-7 md:w-9 h-[1.5px] bg-[#6E4F23]/90 my-1.5 md:my-2" />
-            <div className="font-serif text-[24px] sm:text-[30px] md:text-[46px] leading-none tracking-[0.08em]">11</div>
-            <div className="w-7 md:w-9 h-[1.5px] bg-[#6E4F23]/90 my-1.5 md:my-2" />
-            <div className="font-serif text-[24px] sm:text-[30px] md:text-[46px] leading-none tracking-[0.08em]">26</div>
-          </motion.div>
-        </div>
+{/* VIDEO BACKDROP SECTION */}
+<section className="relative w-full flex items-center justify-center overflow-hidden">
+  <video
+    autoPlay
+    loop
+    muted
+    playsInline
+    className="w-full h-auto object-cover max-h-[80vh]"
+  >
+    <source src="/videos/hydrangeavid.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
 
-        <div className="pl-3 md:pl-5 -ml-3 md:-ml-5">
-          <HydrangeaBushel side="right" />
-        </div>
-      </section>
+  {/* Overlay gradient for readability (optional) */}
+  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/10 to-white/70 pointer-events-none" />
+</section>
+
+
+
+
       {/* SAVE THE DATE SECTION */}
       <motion.h2
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut", delay: 0.5 }}
-        className="-mt-4 sm:-mt-10 md:-mt-20 text-[#000000] font-serif
-                  text-[26px] md:text-[34px]
+        className="-mt-4 sm:-mt-10 md:-mt-20 text-[#2f3a5a] font-serif
+                  text-[20px] md:text-[25px]
                   tracking-[0.12em] md:tracking-[0.22em]
                   text-center [text-shadow:_0_2px_4px_rgba(0,0,0,0.28)]"
         aria-label="Save the Date"
@@ -138,13 +134,13 @@ export default function Home() {
           <div
             className="w-full max-w-[90vw] mx-auto 
                       flex flex-wrap justify-center items-baseline
-                      gap-x-[0.35em] gap-y-[0.1em]
+                      gap-x-[1em] gap-y-[0.1em]
                       drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)] leading-tight"
           >
             {/* SAVE */}
             <span className="inline-flex items-baseline whitespace-nowrap">
               <span
-                className="inline-block font-vibes align-baseline"
+                className="inline-block font-fajardose align-baseline"
                 style={{ fontSize: "3.6em", lineHeight: "0.86" }}
               >
                 S
@@ -155,10 +151,10 @@ export default function Home() {
             {/* THE */}
             <span className="inline-flex items-baseline whitespace-nowrap">
               <span
-                className="inline-block font-vibes align-baseline"
+                className="inline-block font-fajardose  align-baseline"
                 style={{ fontSize: "3.6em", lineHeight: "0.86" }}
               >
-                T
+               T 
               </span>
               <span className="ml-[0.08em]">HE</span>
             </span>
@@ -166,7 +162,7 @@ export default function Home() {
             {/* DATE */}
             <span className="inline-flex items-baseline whitespace-nowrap">
               <span
-                className="inline-block font-vibes align-baseline"
+                className="inline-block font-fajardose  align-baseline"
                 style={{ fontSize: "3.6em", lineHeight: "0.86" }}
               >
                 D
@@ -187,8 +183,26 @@ export default function Home() {
         )}
       </motion.h2>
 
+{/* SUBTEXT UNDER SAVE THE DATE */}
+<motion.div
+  initial={{ opacity: 0, y: 10 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.8, ease: "easeOut", delay: 0.7 }}
+  className="text-center mt-2 md:mt-4"
+>
+  <p
+    className="italic text-[#3e3e3e] font-cormorant text-[17px] md:text-[20px] leading-snug"
+  >
+    for our wedding in Rhode Island
+  </p>
+  <p
+    className="mt-1 text-[#2a2a2a] font-cormorant text-[17px] md:text-[20px] tracking-wide"
+  >
+    Amanda George &amp; Jonathan Tiller
+  </p>
+</motion.div>
 
-      {/* Decorative line under Save the Date */}
+
 {/* Decorative line under Save the Date */}
 <div className="relative my-6 flex justify-center">
   <svg
